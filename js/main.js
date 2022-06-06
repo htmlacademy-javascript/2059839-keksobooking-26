@@ -1,4 +1,4 @@
-function getPositiveRandomInt(min, max) {
+function getPositiveRandomInt(min, max) { //функция на генерацию случайного целого положительного числа
   let result;
 
   //делаем проверку, что число "от" в диапазоне положительное
@@ -17,8 +17,9 @@ function getPositiveRandomInt(min, max) {
   };
 };
 
-console.log(getPositiveRandomInt(5, 13));
-function getPositiveRandomFloat (min, max, numLength) {
+getPositiveRandomInt(5, 9); //чтобы линтер не ругался
+
+function getPositiveRandomFloat(min, max, numLength) { //функция на генерацию случайного дробного положительного числа
   let result;
   //делаем проверку, что число "от" в диапазоне положительное
 
@@ -35,3 +36,5 @@ function getPositiveRandomFloat (min, max, numLength) {
     };
   };
 };
+
+getPositiveRandomFloat(0.345, 6.789467, 4); //чтобы линтер не ругался
