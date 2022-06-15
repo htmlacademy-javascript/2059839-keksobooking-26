@@ -99,7 +99,7 @@ const getPositiveRandomFloat = function (min, max, numLength = 1) { //функц
     return validationRangeError;
   }
   //проверки пройдены, генерим число
-  return (Math.random() * (max - min + 1) + min).toFixed(numLength); //Максимум и минимум включаются
+  return parseFloat( (Math.random() * (max - min + 1) + min).toFixed(numLength) ); //Максимум и минимум включаются
 };
 
 // функция на получение рандомного элемента массива
