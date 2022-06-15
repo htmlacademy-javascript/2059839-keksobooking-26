@@ -205,4 +205,3 @@ const createAd = function(i) {
 
 // генерим финальный массив объектов
 const testArray = Array.from({length: EXAMPLE_AD_COUNT}, (v,i) => createAd(i));
-console.log(testArray);
