@@ -204,4 +204,7 @@ const createAd = function(i) {
 };
 
 // генерим финальный массив объектов
-const testArray = Array.from({length: EXAMPLE_AD_COUNT}, (v,i) => createAd(i));
+const adExamples = Array.from({length: EXAMPLE_AD_COUNT}, (v,i) => createAd(i));
+
+const testFunction = (array) => array.length; //чтобы линтер не ругался на неиспользуемый массив
+testFunction(adExamples); //чтобы линтер не ругался на неиспользуемый массив
