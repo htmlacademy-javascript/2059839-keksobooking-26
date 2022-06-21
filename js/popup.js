@@ -32,23 +32,20 @@ const createPopup = function (element) {
   const featureList = newPopup.querySelectorAll('.popup__feature');
   //проверяем что фичи пришли
   if (element.offer.features.length === 0) {
-    featureList.forEach( (featureListItem) => {
-      featureListItem.classList.add('visually-hidden');
-    });
+    newPopup.querySelector('.popup__features').remove();
   } else {
     //делаем мапу для дальнейшего сравнения с классами
     const modifiers = element.offer.features.map( (feature) => `popup__feature--${feature}` );
     //удаляем ненужные features
-    featureList.forEach( (featureListItem) => {
-      if (!modifiers.includes( featureListItem.classList[1]) ) {
+    featureList.forEach( (featureListItem, i) => {
+      if ( !featureListItem.classList.contains(modifiers[i]) ) {
         featureListItem.remove(); //тут удаляем, есть вариант еще прятать добавляя класс 'visually-hidden'
       }
     });
   }
   //В блок .popup__description выведите описание объекта недвижимости offer.description.
   if (element.offer.description.length === 0) {
-    newPopup.querySelector('.popup__description').classList.add('visually-hidden');
-    newPopup.querySelector('.popup__description').textContent = ''; //кмк необязательно текст шаблона описания тереть, но хочу - он не нужен
+    newPopup.querySelector('.popup__description').remove(); //злобный смех
   } else {
     newPopup.querySelector('.popup__description').textContent = element.offer.description;
   }
@@ -58,7 +55,7 @@ const createPopup = function (element) {
   const newPhotoTemplate = photosList.querySelector('.popup__photo');
 
   if (element.offer.photos.length === 0) {
-    photosList.classList.add('visually-hidden');
+    photosList.remove(); //злобный смех
   } else {
     element.offer.photos.forEach((e, i) => {
       const newImg = newPhotoTemplate.cloneNode(true);
