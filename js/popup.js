@@ -1,4 +1,3 @@
-import {createAdExamples} from './data.js';
 //мапа для типов
 const typeMap = {
   palace: 'Дворец',
@@ -7,9 +6,7 @@ const typeMap = {
   bungalow:'Бунгало',
   hotel:'Отель'
 };
-const adExamples = createAdExamples();
 const popupTemplate = document.querySelector('#card').content.querySelector('.popup');
-const popupPlace = document.querySelector('#map-canvas'); //сюда надо отрисовать 1 попап
 
 //функция на заполнение попапа по шаблону
 const createPopup = function (element) {
@@ -55,11 +52,11 @@ const createPopup = function (element) {
   const newPhotoTemplate = photosList.querySelector('.popup__photo');
 
   if (element.offer.photos.length === 0) {
-    photosList.remove(); //злобный смех
+    photosList.remove();
   } else {
-    element.offer.photos.forEach((e, i) => {
+    element.offer.photos.forEach((item) => {
       const newImg = newPhotoTemplate.cloneNode(true);
-      newImg.src = element.offer.photos[i];
+      newImg.src = item;
       photosList.appendChild(newImg);
     });
     photosList.children[0].remove(); //удаляем шаблон,с которого копировали
@@ -70,6 +67,4 @@ const createPopup = function (element) {
 
   return newPopup;
 };
-
-//Отрисуйте один из сгенерированных DOM-элементов, например первый, в блок #map-canvas, чтобы проверить, что данные в разметку были вставлены корректно.
-popupPlace.appendChild(createPopup(adExamples[0]));
+export {createPopup};
