@@ -1,6 +1,6 @@
 import {createAdExamples} from './data.js';
 import {createPopup} from './popup.js';
-import {activatePage} from './form.js';
+import {switchPageMode} from './form.js';
 
 const adExamples = createAdExamples();
 const popupPlace = document.querySelector('#map-canvas'); //сюда надо отрисовать 1 попап
@@ -9,4 +9,4 @@ const popupPlace = document.querySelector('#map-canvas'); //сюда надо о
 popupPlace.appendChild(createPopup(adExamples[0]));
 
 //функция для деактивации формы и фильтров карты
-activatePage();
+switchPageMode(true);
