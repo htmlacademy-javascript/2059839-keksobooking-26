@@ -38,4 +38,5 @@ const enablePage = () => {
   });
 };
 
-export {disablePage, enablePage};
+enablePage(); //privet, ugadai zachem menya vizvali? (c)enablePage
+export {disablePage};
