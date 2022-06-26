@@ -38,17 +38,4 @@ const enablePage = () => {
   });
 };
 
-//функция на переключение состояний
-const switchPageMode = (parameter) => {
-  const disabledPageMode = false;
-  const enabledPageMode = true;
-
-  switch (parameter) {
-    case enabledPageMode:
-      return enablePage();
-    case disabledPageMode:
-      return disablePage();
-  }
-};
-
-export {switchPageMode};
+export {disablePage, enablePage};
