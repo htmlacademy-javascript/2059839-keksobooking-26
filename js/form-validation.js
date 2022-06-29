@@ -4,6 +4,9 @@ const capacityElement = adFormContainerElement.querySelector( '[name="capacity"]
 const adTitleElement = adFormContainerElement.querySelector( '[name="title"]');
 const adPriceElement = adFormContainerElement.querySelector( '[name="price"]');
 const adAddressElement = adFormContainerElement.querySelector( '[name="address"]');
+const adTypeElement = adFormContainerElement.querySelector( '[name="type"]');
+const adTimeInElement = adFormContainerElement.querySelector( '[name="timein"]');
+const adTimeOutElement = adFormContainerElement.querySelector( '[name="timeout"]');
 
 //читабельные тексты ошибок
 const validationPrettyErrorText = {
@@ -19,7 +22,7 @@ const validationPrettyErrorText = {
     'maxLength': 'Максимальная длина 100 символов',
   },
   'price':{
-    'min':'Минимальная цена: ',
+    'min':'Для выбраного типа жилья цена должна быть от ',
     'max':'Максимальная цена 100 000 руб.'
   }
 };
@@ -97,6 +100,10 @@ const validateRoomCapacity = () => adFormValidationSetting.capacity.roomNumberOp
 //функция на возврат текста ошибки при невалидном выборе мест
 const getCapacityErrorMessage = () => validationPrettyErrorText.capacity[roomNumberElement.value];
 
+const validateMinPrice = () => Number(adPriceElement.value) >= Number(adFormValidationSetting.price.min[adTypeElement.value]);
+
+const getMinPriceErrorMessage = () => `${validationPrettyErrorText.price.min}${adFormValidationSetting.price.min[adTypeElement.value]} руб.`;
+
 //выставляем настройки в дом перед созданием валидатора
 setTitleValidationSettings();
 setPriceValidationSettings();
@@ -112,17 +119,33 @@ const pristine = new Pristine(adFormContainerElement, {
   errorTextClass: 'ad-form__error'
 },true);
 
-const onFieldChange = () => {
+pristine.addValidator(capacityElement, validateRoomCapacity, getCapacityErrorMessage);
+pristine.addValidator(adPriceElement, validateMinPrice, getMinPriceErrorMessage);
+
+const onRoomNumberChange = () => {
   pristine.validate(capacityElement);
 };
 
-pristine.addValidator(capacityElement, validateRoomCapacity, getCapacityErrorMessage);
+const onTypeChange = () => {
+  adPriceElement.min = adFormValidationSetting.price.min[adTypeElement.value];
+  adPriceElement.placeholder = adFormValidationSetting.price.min[adTypeElement.value];
+  pristine.validate(adPriceElement);
+};
 
-roomNumberElement.addEventListener('change',onFieldChange);
+const onTimeOutChange = () => {
+  adTimeInElement.value = adTimeOutElement.value;
+};
+const onTimeInChange = () => {
+  adTimeOutElement.value = adTimeInElement.value;
+};
+
+roomNumberElement.addEventListener('change',onRoomNumberChange);
+adTypeElement.addEventListener('change',onTypeChange);
+adTimeOutElement.addEventListener('change',onTimeOutChange);
+adTimeInElement.addEventListener('change',onTimeInChange);
 
 adFormContainerElement.addEventListener('submit', (evt) => {
-  const isValid = pristine.validate();
-  if (!isValid) {
+  if (!pristine.validate()) {
     evt.preventDefault();
   }
 });
