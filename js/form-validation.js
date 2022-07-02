@@ -149,3 +149,5 @@ adFormContainerElement.addEventListener('submit', (evt) => {
     evt.preventDefault();
   }
 });
+
+export {adAddressElement};
