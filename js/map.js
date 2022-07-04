@@ -1,17 +1,37 @@
 import {enablePage} from './form.js';
-import {adAddressElement} from './form-validation';
+import {
+  adAddressElement,
+  adFormValidationSetting,
+  prepareAddressValue
+} from './form-validation.js';
+import {createAdExamples} from './data.js';
+import {createPopup} from './popup.js';
 
 const mapContainerElement = document.querySelector( '#map-canvas');
+const buttonResetElement = document.querySelector( '.ad-form__reset');
+//создаем объекты сэмплов объявлений,
+//тут, потому что если создавать в main.js, а потом тащить сюда - выдает ошибку, что запрашивается переменная раньше ее инициализации
+const adExamples = createAdExamples();
+
 const mapStartPosition = {
-  lat:35.68173,
-  lng:139.75398,
+  lat:adFormValidationSetting.address.startPosition.lat,
+  lng:adFormValidationSetting.address.startPosition.lng,
   scale:10
 };
+const mainPinIcon = L.icon({
+  iconUrl: './img/main-pin.svg',
+  iconSize: [56, 56],
+  iconAnchor: [23, 56],
+});
+const pinIcon = L.icon({
+  iconUrl: './img/pin.svg',
+  iconSize: [40, 40],
+  iconAnchor: [20, 40],
+});
 
-const map = L.map('map-canvas')
+const map = L.map(mapContainerElement)
   .on('load', () => {
     enablePage();
-    console.log('Карта инициализирована');
   })
   .setView(
     {
@@ -28,13 +48,7 @@ L.tileLayer(
   },
 ).addTo(map);
 
-const mainPinIcon = L.icon({
-  iconUrl: './img/main-pin.svg',
-  iconSize: [144, 144],
-  iconAnchor: [72, 144],
-});
-
-const marker = L.marker(
+const mainMarker = L.marker(
   {
     lat:mapStartPosition.lat,
     lng:mapStartPosition.lng,
@@ -45,93 +59,50 @@ const marker = L.marker(
   },
 );
 
-marker.addTo(map);
+const markerGroup = L.layerGroup().addTo(map);
 
-marker.on('moveend', (evt) => {
-  console.log(evt.target);
-  console.log(evt.target.getLatLng());
-  adAddressElement.value = evt.target.getLatLng();
-
-});
-
-//неглавные метки
-const icon = L.icon({
-  iconUrl: './img/pin.svg',
-  iconSize: [40, 40],
-  iconAnchor: [20, 40],
-});
-
-/*
-//возврат пина и карты на стартовую позицию после нажатия на кнопку сброса
-resetButton.addEventListener('click', () => {
-  mainPinMarker.setLatLng({
-    lat: 59.96831,
-    lng: 30.31748,
-  });
-
-  map.setView({
-    lat: 59.96831,
-    lng: 30.31748,
-  }, 16);
-});
-
-//удаление метки
-mainPinMarker.remove();
-
-//создаем метки и добавляем их на карту, points - массив объектов
-points.forEach(({lat, lng}) => {
+const createMarker = (element) => {
   const marker = L.marker(
     {
-      lat,
-      lng,
+      lat: element.location.lat,
+      lng: element.location.lng
     },
     {
-      icon
+      icon: pinIcon
     }
   );
 
   marker
-    .addTo(map); //добавляем на карту
-    .bindPopup(); //привязываем балун, внутри передаем функцию, возвращающую заполненный дом-элемент объявления
-});
-//создаем слой для меток
-const markerGroup = L.layerGroup().addTo(map);
+    .addTo(markerGroup)
+    .bindPopup(createPopup(element));
 
-const createMarker = (point) => {
-  const {lat, lng} = point;
-  const marker = L.marker(
-    {
-      lat,
-      lng,
-    },
-    {
-      icon,
-    },
-  );
-
-  marker
-    .addTo(markerGroup) //добавляем не на карту, а на слой
-    .bindPopup(createCustomPopup(point));
+  return marker;
 };
 
+const setDefaultMapPosition = () => {
+  map.setView(
+    {
+      lat:mapStartPosition.lat,
+      lng:mapStartPosition.lng,
+    },
+    mapStartPosition.scale
+  );
 
-const markers = points.map((point) => {
-  return createMarker(point);
-});
-//удаление маркеров
-markers.forEach((marker) => {
-  marker.remove();
-});
-//удаление маркеров через очистку слоя
-markerGroup.clearLayers();
+  mainMarker.setLatLng(
+    {
+      lat:mapStartPosition.lat,
+      lng:mapStartPosition.lng,
+    }
+  );
+};
+// функция на создание точек объявлений на карте и отрисовку слоя с ними
+const fillMapLayer = (array) => {
+  array.forEach((element) => createMarker(element));
+};
 
-//по кнопке скрываем текущие метки и отрисовываем новые - пригодится для фильтров
-nextButton.addEventListener('click', () => {
-  markerGroup.clearLayers();
-  points.slice(points.length / 2).forEach((point) => {
-    createMarker(point);
-  });
-  nextButton.remove();
+mainMarker.addTo(map);
+mainMarker.on('moveend', (evt) => {
+  adAddressElement.value = prepareAddressValue(evt.target.getLatLng(), adFormValidationSetting.address.coordinateNumLength);
 });
-
-*/
+fillMapLayer(adExamples);
+buttonResetElement.addEventListener('click', setDefaultMapPosition);
