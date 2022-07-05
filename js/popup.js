@@ -9,7 +9,7 @@ const typeMap = {
 const popupTemplate = document.querySelector('#card').content.querySelector('.popup');
 
 //функция на заполнение попапа по шаблону
-const createPopup = function (element) {
+const createPopup = (element) => {
   const newPopup = popupTemplate.cloneNode(true);
   //Выведите заголовок объявления offer.title в заголовок .popup__title.
   newPopup.querySelector('.popup__title').textContent = element.offer.title;

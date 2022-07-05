@@ -1,4 +1,6 @@
 import {adFormContainerElement} from './form.js';
+import {cutNumber} from './util.js';
+
 const roomNumberElement = adFormContainerElement.querySelector( '[name="rooms"]');
 const capacityElement = adFormContainerElement.querySelector( '[name="capacity"]');
 const adTitleElement = adFormContainerElement.querySelector( '[name="title"]');
@@ -57,7 +59,11 @@ const adFormValidationSetting = {
   'address':{
     'required':true,
     'readonly':true,
-    'value':'Address sample'
+    startPosition:{
+      lat:35.68173,
+      lng:139.75398,
+    },
+    coordinateNumLength:5
   }
 };
 
@@ -83,10 +89,14 @@ const setPriceValidationSettings = () => {
   adPriceElement.dataset.pristineRequiredMessage = (adFormValidationSetting.price.required) ? validationPrettyErrorText.required : '';
 };
 
+//функция на генерацию адреса нужного формата
+const prepareAddressValue = (point, coordinateLength) => `${cutNumber(point.lat, coordinateLength)}, ${cutNumber(point.lng, coordinateLength)}`;
+
 //функция на установку сетингов для адреса
 const setAddressValidationSettings = () => {
+  //указываем дефолтный адрес
+  adAddressElement.value = prepareAddressValue(adFormValidationSetting.address.startPosition, adFormValidationSetting.address.coordinateNumLength);
   //пишем сэмпл адреса, т.к. поле обязательное и доступно только на чтение - в будущем тут будут автомато координаты с карты
-  adAddressElement.value = adFormValidationSetting.address.value;
   adAddressElement.readOnly = (adFormValidationSetting.address.readonly) ? 'readonly' : '';
   //атрибуты для проверок
   adAddressElement.required = (adFormValidationSetting.address.required) ? 'required' : '';
@@ -103,7 +113,6 @@ const getCapacityErrorMessage = () => validationPrettyErrorText.capacity[roomNum
 const validateMinPrice = () => Number(adPriceElement.value) >= Number(adFormValidationSetting.price.min[adTypeElement.value]);
 
 const getMinPriceErrorMessage = () => `${validationPrettyErrorText.price.min}${adFormValidationSetting.price.min[adTypeElement.value]} руб.`;
-
 //выставляем настройки в дом перед созданием валидатора
 setTitleValidationSettings();
 setPriceValidationSettings();
@@ -132,6 +141,9 @@ const onTypeChange = () => {
   pristine.validate(adPriceElement);
 };
 
+const onPriceChange = () => {
+  pristine.validate(adPriceElement);
+};
 const onTimeOutChange = () => {
   adTimeInElement.value = adTimeOutElement.value;
 };
@@ -141,6 +153,7 @@ const onTimeInChange = () => {
 
 roomNumberElement.addEventListener('change',onRoomNumberChange);
 adTypeElement.addEventListener('change',onTypeChange);
+adPriceElement.addEventListener('change',onPriceChange);
 adTimeOutElement.addEventListener('change',onTimeOutChange);
 adTimeInElement.addEventListener('change',onTimeInChange);
 
@@ -149,3 +162,12 @@ adFormContainerElement.addEventListener('submit', (evt) => {
     evt.preventDefault();
   }
 });
+
+export {
+  adAddressElement,
+  adPriceElement,
+  adTypeElement,
+  adFormValidationSetting,
+  onPriceChange,
+  prepareAddressValue
+};

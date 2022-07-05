@@ -1,5 +1,5 @@
 //функция на генерацию случайного целого положительного числа
-const getPositiveRandomInt = function (min, max) {
+const getPositiveRandomInt = (min, max) => {
   //делаем проверку, что число "от" в диапазоне положительное
   if (min < 0) {
     const validationPositiveError = `min = ${min} - минимальное значение диапазона должно быть больше или равно 0. Измените минимальное значение.`;
@@ -16,8 +16,10 @@ const getPositiveRandomInt = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min; //включение максимума и минимума
 };
 
+const cutNumber = (num, numLength) => parseFloat( num.toFixed(numLength) );
+
 //функция на генерацию случайного дробного положительного числа
-const getPositiveRandomFloat = function (min, max, numLength = 1) { //функция на генерацию случайного дробного положительного числа
+const getPositiveRandomFloat = (min, max, numLength = 1) => { //функция на генерацию случайного дробного положительного числа
   //делаем проверку, что число "от" в диапазоне положительное
   if (min < 0) {
     const validationPositiveError = `min = ${min} - минимальное значение диапазона должно быть больше или равно 0. Измените минимальное значение.`;
@@ -29,17 +31,15 @@ const getPositiveRandomFloat = function (min, max, numLength = 1) { //функц
     return validationRangeError;
   }
   //проверки пройдены, генерим число
-  return parseFloat( (Math.random() * (max - min + 1) + min).toFixed(numLength) ); //Максимум и минимум включаются
+  return cutNumber( (Math.random() * (max - min + 1) + min), numLength ); //Максимум и минимум включаются
 };
 
 // функция на получение рандомного элемента массива
-const getRandomArrayElement = function (element) {
-  return element[getPositiveRandomInt(0, element.length - 1)];
-};
+const getRandomArrayElement = (element)  => element[getPositiveRandomInt(0, element.length - 1)];
 
 // функция на перемешку элементов массива - необязательная, для красоты в примерах
 //источник: https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array/2450976#2450976
-const shuffle = function (array) {
+const shuffle = (array) => {
   let currentIndex = array.length, temporaryValue, randomIndex ;
 
   // While there remain elements to shuffle...
@@ -59,17 +59,24 @@ const shuffle = function (array) {
 };
 
 //функция на генерацию массива случайной длины
-const getRandomArrayLength = function (array) {
+const getRandomArrayLength = (array) => {
   shuffle(array);
   return array.slice(0,getPositiveRandomInt(1,array.length));
 };
 
 //функция на подготовку номеров для урлов аватаров
-const getPrettyNumber = function (number) {
+const getPrettyNumber = (number) => {
   if (number.toString().length === 1) {
     number = `0${number}`;
   }
   return number;
 };
 
-export {getPositiveRandomInt, getPositiveRandomFloat, getRandomArrayElement, getRandomArrayLength, getPrettyNumber};
+export {
+  getPositiveRandomInt,
+  getPositiveRandomFloat,
+  getRandomArrayElement,
+  getRandomArrayLength,
+  getPrettyNumber,
+  cutNumber
+};

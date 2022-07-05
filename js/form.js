@@ -39,6 +39,7 @@ const enablePage = () => {
 
 export {
   adFormContainerElement,
+  adFormSliderElement,
   enablePage,
   disablePage
 };

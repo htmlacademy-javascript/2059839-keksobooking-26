@@ -74,7 +74,7 @@ const createAd = function(i) {
   //генерим координаты для адреса
   const coordinates = {
     lat: getPositiveRandomFloat(COORDINATE_RANGE.lat.min, COORDINATE_RANGE.lat.max, COORDINATE_RANGE.coordinateAccuracy),
-    lng: getPositiveRandomFloat(COORDINATE_RANGE.lat.min, COORDINATE_RANGE.lat.max, COORDINATE_RANGE.coordinateAccuracy)
+    lng: getPositiveRandomFloat(COORDINATE_RANGE.lng.min, COORDINATE_RANGE.lng.max, COORDINATE_RANGE.coordinateAccuracy)
   };
 
   //генерим финальный объект
