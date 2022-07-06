@@ -7,6 +7,8 @@ const typeMap = {
   hotel:'Отель'
 };
 const popupTemplate = document.querySelector('#card').content.querySelector('.popup');
+const successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
+const errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
 
 //функция на заполнение попапа по шаблону
 const createPopup = (element) => {
@@ -28,7 +30,7 @@ const createPopup = (element) => {
   //В список .popup__features выведите все доступные удобства в объявлении.
   const featureList = newPopup.querySelectorAll('.popup__feature');
   //проверяем что фичи пришли
-  if (element.offer.features.length === 0) {
+  if (element.offer.features === undefined) {
     newPopup.querySelector('.popup__features').remove();
   } else {
     //делаем мапу для дальнейшего сравнения с классами
@@ -41,7 +43,7 @@ const createPopup = (element) => {
     });
   }
   //В блок .popup__description выведите описание объекта недвижимости offer.description.
-  if (element.offer.description.length === 0) {
+  if (element.offer.description === undefined) {
     newPopup.querySelector('.popup__description').remove(); //злобный смех
   } else {
     newPopup.querySelector('.popup__description').textContent = element.offer.description;
@@ -51,7 +53,7 @@ const createPopup = (element) => {
   const photosList = newPopup.querySelector('.popup__photos');
   const newPhotoTemplate = photosList.querySelector('.popup__photo');
 
-  if (element.offer.photos.length === 0) {
+  if (element.offer.photos === undefined) {
     photosList.remove();
   } else {
     element.offer.photos.forEach((item) => {
@@ -67,4 +69,83 @@ const createPopup = (element) => {
 
   return newPopup;
 };
-export {createPopup};
+
+/*
+ Если отправка данных прошла успешно, показывается соответствующее сообщение. Разметку сообщения, которая находится в блоке #success внутри шаблона template, нужно разместить перед закрывающим тегом </body>. Сообщение должно исчезать по нажатию на клавишу Esc и по клику на произвольную область экрана.
+
+2.7. Если при отправке данных произошла ошибка запроса, показывается соответствующее сообщение. Разметку сообщения, которая находится в блоке #error в шаблоне template, нужно разместить перед закрывающим тегом </body>. Сообщение должно исчезать после нажатия на кнопку .error__button, по нажатию на клавишу Esc и по клику на произвольную область экрана. В таком случае вся введённая пользователем информация сохраняется, чтобы у него была возможность отправить форму повторно.
+*/
+
+const prepareSuccessMessagePopup = () => {
+  const newSuccessMessageElement = successMessageTemplate.cloneNode(true);
+  newSuccessMessageElement.classList.add('visually-hidden');
+  document.querySelector('body').appendChild(newSuccessMessageElement);
+};
+const prepareErrorMessagePopup = () => {
+  const newErrorMessageElement = errorMessageTemplate.cloneNode(true);
+  newErrorMessageElement.classList.add('visually-hidden');
+  document.querySelector('body').appendChild(newErrorMessageElement);
+};
+
+
+
+const onSuccessPopupEscKeydown = (evt) => {
+  if (evt.key === 'Escape') {
+    hideSuccessMessagePopup();
+  }
+};
+
+const onSuccessPopupClick = () => {
+  hideSuccessMessagePopup();
+};
+
+const onErrorPopupEscKeydown = (evt) => {
+  if (evt.key === 'Escape') {
+    hideErrorMessagePopup();
+  }
+};
+
+const onErrorPopupClick = () => {
+  hideErrorMessagePopup();
+};
+
+const showSuccessMessagePopup = () => {
+  document.querySelector('success').classList.remove('visually-hidden');
+  document.addEventListener('click', onSuccessPopupClick);
+  document.addEventListener('keydown', onSuccessPopupEscKeydown);
+  //добавляем листенер на клик
+  //добавляем листенер на esc
+};
+
+function hideSuccessMessagePopup () {
+  document.querySelector('success').classList.add('visually-hidden');
+  document.removeEventListener('click', onSuccessPopupClick);
+  document.removeEventListener('keydown', onSuccessPopupEscKeydown);
+  //добавляем листенер на клик
+  //добавляем листенер на esc
+}
+
+const showErrorMessagePopup = () => {
+  document.querySelector('.error').classList.remove('visually-hidden');
+  document.addEventListener('click', onErrorPopupClick);
+  document.addEventListener('keydown', onErrorPopupEscKeydown);
+  //добавляем листенер на клик
+  //добавляем листенер на esc
+};
+
+function hideErrorMessagePopup () {
+  document.querySelector('.error').classList.add('visually-hidden');
+  document.removeEventListener('click', onErrorPopupClick);
+  document.removeEventListener('keydown', onErrorPopupEscKeydown);
+  //добавляем листенер на клик
+  //добавляем листенер на esc
+}
+
+prepareSuccessMessagePopup();
+prepareErrorMessagePopup();
+
+export {
+  createPopup,
+  showSuccessMessagePopup,
+  showErrorMessagePopup
+};

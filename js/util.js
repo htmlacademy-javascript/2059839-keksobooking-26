@@ -1,3 +1,5 @@
+const ALERT_SHOW_TIME = 5000;
+
 //функция на генерацию случайного целого положительного числа
 const getPositiveRandomInt = (min, max) => {
   //делаем проверку, что число "от" в диапазоне положительное
@@ -72,11 +74,33 @@ const getPrettyNumber = (number) => {
   return number;
 };
 
+const showAlert = (message) => {
+  const alertContainer = document.createElement('div');
+  alertContainer.style.zIndex = '100';
+  alertContainer.style.position = 'absolute';
+  alertContainer.style.left = '0';
+  alertContainer.style.top = '0';
+  alertContainer.style.right = '0';
+  alertContainer.style.padding = '10px 3px';
+  alertContainer.style.fontSize = '30px';
+  alertContainer.style.textAlign = 'center';
+  alertContainer.style.backgroundColor = 'red';
+
+  alertContainer.textContent = message;
+
+  document.body.append(alertContainer);
+
+  setTimeout(() => {
+    alertContainer.remove();
+  }, ALERT_SHOW_TIME);
+};
+
 export {
   getPositiveRandomInt,
   getPositiveRandomFloat,
   getRandomArrayElement,
   getRandomArrayLength,
   getPrettyNumber,
-  cutNumber
+  cutNumber,
+  showAlert
 };

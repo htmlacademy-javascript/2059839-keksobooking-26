@@ -4,24 +4,20 @@ import {
   adFormValidationSetting,
   prepareAddressValue
 } from './form-validation.js';
-import {createAdExamples} from './data.js';
 import {createPopup} from './popup.js';
 
 const mapContainerElement = document.querySelector( '#map-canvas');
 const buttonResetElement = document.querySelector( '.ad-form__reset');
-//создаем объекты сэмплов объявлений,
-//тут, потому что если создавать в main.js, а потом тащить сюда - выдает ошибку, что запрашивается переменная раньше ее инициализации
-const adExamples = createAdExamples();
 
 const mapStartPosition = {
   lat:adFormValidationSetting.address.startPosition.lat,
   lng:adFormValidationSetting.address.startPosition.lng,
-  scale:10
+  scale:12
 };
 const mainPinIcon = L.icon({
   iconUrl: './img/main-pin.svg',
-  iconSize: [56, 56],
-  iconAnchor: [23, 56],
+  iconSize: [52, 52],
+  iconAnchor: [26, 52],
 });
 const pinIcon = L.icon({
   iconUrl: './img/pin.svg',
@@ -80,6 +76,7 @@ const createMarker = (element) => {
 };
 
 const setDefaultMapPosition = () => {
+  map.closePopup();
   map.setView(
     {
       lat:mapStartPosition.lat,
@@ -104,5 +101,9 @@ mainMarker.addTo(map);
 mainMarker.on('moveend', (evt) => {
   adAddressElement.value = prepareAddressValue(evt.target.getLatLng(), adFormValidationSetting.address.coordinateNumLength);
 });
-fillMapLayer(adExamples);
+//fillMapLayer(adExamples);
 buttonResetElement.addEventListener('click', setDefaultMapPosition);
+
+export {
+  fillMapLayer
+};

@@ -1,5 +1,13 @@
 import {adFormContainerElement} from './form.js';
-import {cutNumber} from './util.js';
+import {
+  cutNumber,
+  showAlert
+} from './util.js';
+import {sendData} from './api.js';
+import {
+  showSuccessMessagePopup,
+  showErrorMessagePopup
+} from './popup.js';
 
 const roomNumberElement = adFormContainerElement.querySelector( '[name="rooms"]');
 const capacityElement = adFormContainerElement.querySelector( '[name="capacity"]');
@@ -157,11 +165,24 @@ adPriceElement.addEventListener('change',onPriceChange);
 adTimeOutElement.addEventListener('change',onTimeOutChange);
 adTimeInElement.addEventListener('change',onTimeInChange);
 
-adFormContainerElement.addEventListener('submit', (evt) => {
-  if (!pristine.validate()) {
+const setUserFormSubmit = () => {
+  adFormContainerElement.addEventListener('submit', (evt) => {
     evt.preventDefault();
-  }
-});
+    if (pristine.validate()) {
+//Реализуйте возвращение формы в исходное состояние при успешной отправке, а также показ сообщения пользователю.
+//Если при отправке данных произошла ошибка запроса, покажите соответствующее сообщение.
+      console.log('if (pristine.validate()) {');
+      console.log(evt);
+
+      sendData(
+        showSuccessMessagePopup,
+        //(evt) => showSuccessMessagePopup(evt),
+        showErrorMessagePopup,
+        new FormData(evt.target)
+      );
+    }
+  });
+};
 
 export {
   adAddressElement,
@@ -169,5 +190,6 @@ export {
   adTypeElement,
   adFormValidationSetting,
   onPriceChange,
-  prepareAddressValue
+  prepareAddressValue,
+  setUserFormSubmit
 };
