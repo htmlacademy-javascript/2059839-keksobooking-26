@@ -1,21 +1,18 @@
-import {adFormSliderElement} from './form.js';
+import {
+  adFormContainerElement,
+  adFormSliderElement
+} from './form.js';
 import {
   adFormValidationSetting,
   adPriceElement,
+  buttonResetElement,
   adTypeElement,
   onPriceChange
 } from './form-validation.js';
 
-//функция на установку стартового валидного значения цены
-const setValidStartPrice = () => {
-  adPriceElement.value = ( adPriceElement.value <= adFormValidationSetting.price.min[adTypeElement.value] ) ?
-    adPriceElement.value = adFormValidationSetting.price.min[adTypeElement.value] :
-    adPriceElement.value;
-};
-
 noUiSlider.create(adFormSliderElement, {
   range:{
-    min: Number(adFormValidationSetting.price.min[adTypeElement.value]),
+    min: 0,
     max: Number(adFormValidationSetting.price.max)
   },
   start: Number(adFormValidationSetting.price.min[adTypeElement.value]),
@@ -27,26 +24,35 @@ noUiSlider.create(adFormSliderElement, {
   },
 });
 
+adFormSliderElement.noUiSlider.on('change', () => {
+  adPriceElement.value = adFormSliderElement.noUiSlider.get();
+  onPriceChange();
+});
+
+adPriceElement.addEventListener('change',() => {
+  adFormSliderElement.noUiSlider.set(adPriceElement.value);
+});
+
+const setSliderRelativetStartPosition = () => {
+  if (adTypeElement.value === undefined) {
+    return adFormValidationSetting.price.min[adTypeElement.value];
+  }
+  return adTypeElement.value;
+};
+
 //апдейт сеттингов слайдера
 const updateSliderSetting = () => {
   adFormSliderElement.noUiSlider.updateOptions(
     {
       range:{
-        min: Number(adFormValidationSetting.price.min[adTypeElement.value]),
+        min: 0,
         max: Number(adFormValidationSetting.price.max)
       },
-      start: setValidStartPrice()
+      start: setSliderRelativetStartPosition()
     }
   );
 };
 
-adFormSliderElement.noUiSlider.on('update', () => {
-  adPriceElement.value = adFormSliderElement.noUiSlider.get();
-  onPriceChange();
-});
-
-adTypeElement.addEventListener('change',updateSliderSetting);
-
-adPriceElement.addEventListener('change',() => {
-  adFormSliderElement.noUiSlider.set(adPriceElement.value);
-});
+//поправить, при неуспешной отправке данных значения в форме сохраняются, а слайдер сбрасыватся до значения плейсхолдера типа
+adFormContainerElement.addEventListener('submit', updateSliderSetting);
+buttonResetElement.addEventListener('click', updateSliderSetting);

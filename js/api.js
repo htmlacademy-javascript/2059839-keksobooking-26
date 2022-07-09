@@ -22,15 +22,12 @@ const sendData = (onSuccess, onFail, body) => {
     }
   )
     .then((response) => {
-      console.log('response');
-      console.log(response);
-      console.log(response.ok);
       if (!response.ok) {
-        throw new Error('Не удалось отправить форму. Попробуйте ещё раз');
+        onFail();
       }
       onSuccess();
     })
-    .catch( (err) => onFail(err.message) );
+    .catch( () => onFail() );
 };
 
 //const test = getData();

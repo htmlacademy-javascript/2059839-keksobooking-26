@@ -1,4 +1,11 @@
-import {getPositiveRandomInt, getPositiveRandomFloat, getRandomArrayElement, getRandomArrayLength, getPrettyNumber} from './util.js';
+//удалить при рефакторинге
+import {
+  getPositiveRandomInt,
+  getPositiveRandomFloat,
+  getRandomArrayElement,
+  getRandomArrayLength,
+  getPrettyNumber
+} from './util.js';
 //кол-во примеров объявлений
 const EXAMPLE_AD_COUNT = 10;
 //заголовки объявлений

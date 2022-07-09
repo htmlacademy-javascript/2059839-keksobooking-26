@@ -1,8 +1,14 @@
+import {cutNumber} from './util.js';
+
 const adFormContainerElement = document.querySelector('.ad-form');
 const adFormChildrenElement = Array.from(adFormContainerElement.children);
+const adAddressElement = adFormContainerElement.querySelector( '[name="address"]');
+
 const adFormSliderElement = adFormContainerElement.querySelector('.ad-form__slider');
+
 const mapFilterContainerElement = document.querySelector('.map__filters');
 const mapFilterChildrenElement = Array.from(mapFilterContainerElement.children);
+
 
 const disableMapFilter = () => {
   mapFilterContainerElement.classList.add('map__filters--disabled');
@@ -45,10 +51,23 @@ const enablePage = () => {
   enableMapFilter();
 };
 
+//функция на генерацию адреса нужного формата
+const setAddressValue = (point, coordinateLength) => {
+  adAddressElement.value = `${cutNumber(point.lat, coordinateLength)}, ${cutNumber(point.lng, coordinateLength)}`;
+};
+
+const clearForm = () => {
+  adFormContainerElement.reset();
+};
+
 export {
   adFormContainerElement,
   adFormSliderElement,
+  adAddressElement,
   enablePage,
   disablePage,
-  disableMapFilter
+  enableMapFilter,
+  disableMapFilter,
+  clearForm,
+  setAddressValue
 };

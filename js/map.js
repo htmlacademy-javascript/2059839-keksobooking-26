@@ -1,17 +1,23 @@
-import {enablePage} from './form.js';
 import {
-  adAddressElement,
-  adFormValidationSetting,
-  prepareAddressValue
-} from './form-validation.js';
+  enablePage,
+  enableMapFilter,
+  disableMapFilter,
+  setAddressValue
+} from './form.js';
+
+import {getData} from './api.js';
+
 import {createPopup} from './popup.js';
+import {showAlert} from './util.js';
 
+const SIMILLAR_AD_COUNT = 10;
 const mapContainerElement = document.querySelector( '#map-canvas');
-const buttonResetElement = document.querySelector( '.ad-form__reset');
 
+//настройки карты
 const mapStartPosition = {
-  lat:adFormValidationSetting.address.startPosition.lat,
-  lng:adFormValidationSetting.address.startPosition.lng,
+  lat:35.68173,
+  lng:139.75398,
+  coordinateNumLength:5,
   scale:12
 };
 const mainPinIcon = L.icon({
@@ -24,26 +30,13 @@ const pinIcon = L.icon({
   iconSize: [40, 40],
   iconAnchor: [20, 40],
 });
-
-const map = L.map(mapContainerElement)
-  .on('load', () => {
-    enablePage();
-  })
-  .setView(
-    {
-      lat:mapStartPosition.lat,
-      lng:mapStartPosition.lng,
-    },
-    mapStartPosition.scale
-  );
-
-L.tileLayer(
+const map = L.map(mapContainerElement);
+const tile = L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   },
-).addTo(map);
-
+);
 const mainMarker = L.marker(
   {
     lat:mapStartPosition.lat,
@@ -54,8 +47,7 @@ const mainMarker = L.marker(
     icon: mainPinIcon,
   },
 );
-
-const markerGroup = L.layerGroup().addTo(map);
+const markerGroup = L.layerGroup();
 
 const createMarker = (element) => {
   const marker = L.marker(
@@ -74,7 +66,19 @@ const createMarker = (element) => {
 
   return marker;
 };
+//функция на заполнение карты
+const fillMap = () => {
+  tile.addTo(map);
+  mainMarker.addTo(map);
+  markerGroup.addTo(map);
+};
 
+// функция на создание точек объявлений на карте и отрисовку слоя с ними
+const fillMapLayer = (array) => {
+  array.forEach((element) => createMarker(element));
+};
+
+//функция на установку дефолтной позиции карты
 const setDefaultMapPosition = () => {
   map.closePopup();
   map.setView(
@@ -92,18 +96,40 @@ const setDefaultMapPosition = () => {
     }
   );
 };
-// функция на создание точек объявлений на карте и отрисовку слоя с ними
-const fillMapLayer = (array) => {
-  array.forEach((element) => createMarker(element));
+const setDefaultAddressValue = function() {
+  setAddressValue(mainMarker.getLatLng(), mapStartPosition.coordinateNumLength);
 };
 
-mainMarker.addTo(map);
+map.on('load', () => {
+  enablePage();
+  disableMapFilter();
+  fillMap();
+  setDefaultAddressValue();
+  getData(
+    //отрисовываем метки при успешном получении данных и активируем фильтры
+    (ads) => {
+      fillMapLayer( ads.slice(0,SIMILLAR_AD_COUNT) );
+      enableMapFilter();
+    },
+    //показываем всплывашку с ошибкой
+    () => {
+      showAlert('Не удалось загрузить похожие объявления');
+    }
+  );
+})
+  .setView(
+    {
+      lat:mapStartPosition.lat,
+      lng:mapStartPosition.lng,
+    },
+    mapStartPosition.scale
+  );
+
 mainMarker.on('moveend', (evt) => {
-  adAddressElement.value = prepareAddressValue(evt.target.getLatLng(), adFormValidationSetting.address.coordinateNumLength);
+  setAddressValue(evt.target.getLatLng(), mapStartPosition.coordinateNumLength);
 });
-//fillMapLayer(adExamples);
-buttonResetElement.addEventListener('click', setDefaultMapPosition);
 
 export {
-  fillMapLayer
+  setDefaultMapPosition,
+  setDefaultAddressValue
 };
