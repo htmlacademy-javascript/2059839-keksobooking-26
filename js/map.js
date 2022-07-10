@@ -1,14 +1,8 @@
 import {
-  enablePage,
-  enableMapFilter,
-  disableMapFilter,
   setAddressValue
 } from './form.js';
 
-import {getData} from './api.js';
-
 import {createPopup} from './popup.js';
-import {showAlert} from './util.js';
 
 const SIMILLAR_AD_COUNT = 10;
 const mapContainerElement = document.querySelector( '#map-canvas');
@@ -96,40 +90,45 @@ const setDefaultMapPosition = () => {
     }
   );
 };
+
 const setDefaultAddressValue = function() {
   setAddressValue(mainMarker.getLatLng(), mapStartPosition.coordinateNumLength);
 };
 
-map.on('load', () => {
-  enablePage();
-  disableMapFilter();
-  fillMap();
-  setDefaultAddressValue();
-  getData(
-    //отрисовываем метки при успешном получении данных и активируем фильтры
-    (ads) => {
-      fillMapLayer( ads.slice(0,SIMILLAR_AD_COUNT) );
-      enableMapFilter();
-    },
-    //показываем всплывашку с ошибкой
-    () => {
-      showAlert('Не удалось загрузить похожие объявления');
-    }
-  );
-})
-  .setView(
-    {
-      lat:mapStartPosition.lat,
-      lng:mapStartPosition.lng,
-    },
-    mapStartPosition.scale
-  );
+const setMapLoadState = (pageState, dataAction, onSuccessDataAction, onFailedDataAction) => {
+  map.on('load', () => {
+    pageState();
+    fillMap();
+    setDefaultAddressValue();
+    dataAction(
+      //отрисовываем метки при успешном получении данных и активируем фильтры
+      (ads) => {
+        fillMapLayer( ads.slice(0,SIMILLAR_AD_COUNT) );
+        onSuccessDataAction();
+      },
+      () => {
+        onFailedDataAction();
+      }
+    );
+  })
+    .setView(
+      {
+        lat:mapStartPosition.lat,
+        lng:mapStartPosition.lng,
+      },
+      mapStartPosition.scale
+    );
+};
 
-mainMarker.on('moveend', (evt) => {
-  setAddressValue(evt.target.getLatLng(), mapStartPosition.coordinateNumLength);
-});
+const setMainMarkerMoveendListener = (onMoveEndAction) => {
+  mainMarker.on('moveend', (evt) => {
+    onMoveEndAction(evt.target.getLatLng(), mapStartPosition.coordinateNumLength);
+  });
+};
 
 export {
   setDefaultMapPosition,
-  setDefaultAddressValue
+  setDefaultAddressValue,
+  setMapLoadState,
+  setMainMarkerMoveendListener
 };

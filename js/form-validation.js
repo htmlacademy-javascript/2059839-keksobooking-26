@@ -1,18 +1,4 @@
-import {
-  adFormContainerElement,
-  adAddressElement
-} from './form.js';
-import {sendData} from './api.js';
-import {
-  showSuccessMessagePopup,
-  showErrorMessagePopup
-} from './popup.js';
-
-import {
-  setDefaultMapPosition,
-  setDefaultAddressValue
-} from './map.js';
-
+const adFormContainerElement = document.querySelector('.ad-form');
 const adTitleElement = adFormContainerElement.querySelector( '[name="title"]');
 const adTypeElement = adFormContainerElement.querySelector( '[name="type"]');
 const adPriceElement = adFormContainerElement.querySelector( '[name="price"]');
@@ -20,9 +6,7 @@ const roomNumberElement = adFormContainerElement.querySelector( '[name="rooms"]'
 const capacityElement = adFormContainerElement.querySelector( '[name="capacity"]');
 const adTimeInElement = adFormContainerElement.querySelector( '[name="timein"]');
 const adTimeOutElement = adFormContainerElement.querySelector( '[name="timeout"]');
-
-const buttonSubmitElement = adFormContainerElement.querySelector( '.ad-form__submit');
-const buttonResetElement = adFormContainerElement.querySelector( '.ad-form__reset');
+const adAddressElement = adFormContainerElement.querySelector( '[name="address"]');
 
 //читабельные тексты ошибок
 const validationPrettyErrorText = {
@@ -96,9 +80,9 @@ const setPriceRelativeAttribute = () => {
 //функция на установку атрибутов с лимитами для поля цен
 const setPriceValidationSettings = () => {
   //атрибуты для проверок
-  setPriceRelativeAttribute();
   adPriceElement.max = adFormValidationSetting.price.max;
   adPriceElement.required = adFormValidationSetting.price.required;
+  adPriceElement.placeholder = adFormValidationSetting.price.min[adTypeElement.value];
   //тексты ошибок
   adPriceElement.dataset.pristineMaxMessage = validationPrettyErrorText.price.max;
   adPriceElement.dataset.pristineRequiredMessage = (adFormValidationSetting.price.required) ? validationPrettyErrorText.required : '';
@@ -140,6 +124,8 @@ const pristine = new Pristine(adFormContainerElement, {
 pristine.addValidator(capacityElement, validateRoomCapacity, getCapacityErrorMessage);
 pristine.addValidator(adPriceElement, validateMinPrice, getMinPriceErrorMessage);
 
+const validateUserForm = () => pristine.validate();
+
 const onRoomNumberChange = () => {
   pristine.validate(capacityElement);
 };
@@ -150,7 +136,8 @@ const onTypeChange = () => {
   pristine.validate(adPriceElement);
 };
 
-const onPriceChange = () => {
+const onPriceChange = (cb) => {
+  cb();
   pristine.validate(adPriceElement);
 };
 const onTimeOutChange = () => {
@@ -160,74 +147,19 @@ const onTimeInChange = () => {
   adTimeOutElement.value = adTimeInElement.value;
 };
 
-roomNumberElement.addEventListener('change',onRoomNumberChange);
-adTypeElement.addEventListener('change',onTypeChange);
-adPriceElement.addEventListener('change',onPriceChange);
-adTimeOutElement.addEventListener('change',onTimeOutChange);
-adTimeInElement.addEventListener('change',onTimeInChange);
+const setAdRoomElementListener = () => roomNumberElement.addEventListener('change',onRoomNumberChange);
+const setAdTypeElementListener = () => adTypeElement.addEventListener('change',onTypeChange);
+const setAdTimeOutElementListener = () => adTimeOutElement.addEventListener('change',onTimeOutChange);
+const setAdPriceElementListener = (cb) => adPriceElement.addEventListener('change', () => onPriceChange(cb));
+const setAdTimeInElementListener = () => adTimeInElement.addEventListener('change',onTimeInChange);
 
-const clearForm = () => {
-  adFormContainerElement.reset();
-  setPriceRelativeAttribute();
-  setDefaultMapPosition();
-  setDefaultAddressValue();
-};
-
-const blockSubmitButton = () => {
-  buttonSubmitElement.disabled = true;
-  buttonSubmitElement.textContent = 'Отправляю...';
-};
-
-const unblockSubmitButton = () => {
-  buttonSubmitElement.disabled = false;
-  buttonSubmitElement.textContent = 'Опубликовать';
-};
-
-const setUserFormSubmit = () => {
-  adFormContainerElement.addEventListener('submit', (evt) => {
-    evt.preventDefault();
-    if (pristine.validate()) {
-      //На время выполнения запроса к серверу кнопка «Опубликовать» блокируется.
-      blockSubmitButton();
-      sendData(
-        () => {
-          //Реализуйте возвращение формы в исходное состояние при успешной отправке, а также показ сообщения пользователю.
-          showSuccessMessagePopup();
-          clearForm();
-          unblockSubmitButton();
-        },
-        () => {
-          //Если при отправке данных произошла ошибка запроса, покажите соответствующее сообщение.
-          showErrorMessagePopup();
-          unblockSubmitButton();
-        },
-        //не генерится форм дата, т.к. обработчик висит на кнопке, а не на форме
-        //и в параметры приходит таргет кнопки, а не формы
-        new FormData(evt.target)
-      );
-    }
-  });
-};
-
-const setUserFormReset = () => {
-  buttonResetElement.addEventListener('click', (evt) => {
-    evt.preventDefault();
-    clearForm();
-  });
-};
-
-/*
-console.log(adTypeElement);
-console.log(adTypeElement.children);
-
-);
-*/
 export {
-  adPriceElement,
-  adTypeElement,
   adFormValidationSetting,
-  buttonResetElement,
-  onPriceChange,
-  setUserFormSubmit,
-  setUserFormReset
+  validateUserForm,
+  setPriceRelativeAttribute,
+  setAdRoomElementListener,
+  setAdTypeElementListener,
+  setAdTimeOutElementListener,
+  setAdPriceElementListener,
+  setAdTimeInElementListener
 };

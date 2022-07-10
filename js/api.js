@@ -30,8 +30,6 @@ const sendData = (onSuccess, onFail, body) => {
     .catch( () => onFail() );
 };
 
-//const test = getData();
-//console.log(test);
 export {
   getData,
   sendData
