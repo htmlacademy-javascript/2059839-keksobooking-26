@@ -91,7 +91,7 @@ const setDefaultMapPosition = () => {
   );
 };
 
-const setDefaultAddressValue = function() {
+const setDefaultAddressValue = () => {
   setAddressValue(mainMarker.getLatLng(), mapStartPosition.coordinateNumLength);
 };
 
