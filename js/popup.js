@@ -7,8 +7,8 @@ const typeMap = {
   hotel:'Отель'
 };
 const popupTemplate = document.querySelector('#card').content.querySelector('.popup');
-const successMessageElement = document.querySelector('#success').content.querySelector('.success');
-const errorMessageElement = document.querySelector('#error').content.querySelector('.error');
+const successMessageTemplateElement = document.querySelector('#success').content.querySelector('.success');
+const errorMessageTemplateElement = document.querySelector('#error').content.querySelector('.error');
 
 //функция на заполнение попапа по шаблону
 const createPopup = (element) => {
@@ -72,44 +72,46 @@ const createPopup = (element) => {
 
 const onSuccessPopupEscKeydown = (evt) => {
   if (evt.key === 'Escape') {
-    hideSuccessMessagePopup();
+    removeSuccessMessagePopup();
   }
 };
 
 const onSuccessPopupClick = () => {
-  hideSuccessMessagePopup();
+  removeSuccessMessagePopup();
 };
 
 const onErrorPopupEscKeydown = (evt) => {
   if (evt.key === 'Escape') {
-    hideErrorMessagePopup();
+    removeErrorMessagePopup();
   }
 };
 
 const onErrorPopupClick = () => {
-  hideErrorMessagePopup();
+  removeErrorMessagePopup();
 };
 
 const showSuccessMessagePopup = () => {
+  const successMessageElement = successMessageTemplateElement.cloneNode(true);
   document.body.appendChild(successMessageElement);
   document.addEventListener('click', onSuccessPopupClick);
   document.addEventListener('keydown', onSuccessPopupEscKeydown);
 };
 
-function hideSuccessMessagePopup () {
-  document.querySelector('#success').content.appendChild(document.body.querySelector('.success'));
+function removeSuccessMessagePopup () {
+  document.body.querySelector('.success').remove();
   document.removeEventListener('click', onSuccessPopupClick);
   document.removeEventListener('keydown', onSuccessPopupEscKeydown);
 }
 
 const showErrorMessagePopup = () => {
+  const errorMessageElement = errorMessageTemplateElement.cloneNode(true);
   document.body.appendChild(errorMessageElement);
   document.addEventListener('click', onErrorPopupClick);
   document.addEventListener('keydown', onErrorPopupEscKeydown);
 };
 
-function hideErrorMessagePopup () {
-  document.querySelector('#error').content.appendChild(document.body.querySelector('.error'));
+function removeErrorMessagePopup () {
+  document.body.querySelector('.error').remove();
   document.removeEventListener('click', onErrorPopupClick);
   document.removeEventListener('keydown', onErrorPopupEscKeydown);
 }

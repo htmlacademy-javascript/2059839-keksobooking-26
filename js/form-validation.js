@@ -124,21 +124,21 @@ const pristine = new Pristine(adFormContainerElement, {
 pristine.addValidator(capacityElement, validateRoomCapacity, getCapacityErrorMessage);
 pristine.addValidator(adPriceElement, validateMinPrice, getMinPriceErrorMessage);
 
-const validateUserForm = () => pristine.validate();
+const validateUserForm = (element) => pristine.validate(element);
 
 const onRoomNumberChange = () => {
-  pristine.validate(capacityElement);
+  validateUserForm(capacityElement);
 };
 
 const onTypeChange = () => {
   adPriceElement.min = adFormValidationSetting.price.min[adTypeElement.value];
   adPriceElement.placeholder = adFormValidationSetting.price.min[adTypeElement.value];
-  pristine.validate(adPriceElement);
+  validateUserForm(adPriceElement);
 };
 
 const onPriceChange = (cb) => {
   cb();
-  pristine.validate(adPriceElement);
+  validateUserForm(adPriceElement);
 };
 const onTimeOutChange = () => {
   adTimeInElement.value = adTimeOutElement.value;
