@@ -1,14 +1,12 @@
-import {adFormContainerElement} from './form.js';
-import {cutNumber} from './util.js';
-
+const adFormContainerElement = document.querySelector('.ad-form');
+const adTitleElement = adFormContainerElement.querySelector( '[name="title"]');
+const adTypeElement = adFormContainerElement.querySelector( '[name="type"]');
+const adPriceElement = adFormContainerElement.querySelector( '[name="price"]');
 const roomNumberElement = adFormContainerElement.querySelector( '[name="rooms"]');
 const capacityElement = adFormContainerElement.querySelector( '[name="capacity"]');
-const adTitleElement = adFormContainerElement.querySelector( '[name="title"]');
-const adPriceElement = adFormContainerElement.querySelector( '[name="price"]');
-const adAddressElement = adFormContainerElement.querySelector( '[name="address"]');
-const adTypeElement = adFormContainerElement.querySelector( '[name="type"]');
 const adTimeInElement = adFormContainerElement.querySelector( '[name="timein"]');
 const adTimeOutElement = adFormContainerElement.querySelector( '[name="timeout"]');
+const adAddressElement = adFormContainerElement.querySelector( '[name="address"]');
 
 //читабельные тексты ошибок
 const validationPrettyErrorText = {
@@ -58,12 +56,7 @@ const adFormValidationSetting = {
   },
   'address':{
     'required':true,
-    'readonly':true,
-    startPosition:{
-      lat:35.68173,
-      lng:139.75398,
-    },
-    coordinateNumLength:5
+    'readonly':true
   }
 };
 
@@ -72,34 +65,34 @@ const setTitleValidationSettings = () => {
   //атрибуты для проверок
   adTitleElement.minLength = adFormValidationSetting.title.minLength;
   adTitleElement.maxLength = adFormValidationSetting.title.maxLength;
-  adTitleElement.required = (adFormValidationSetting.title.required) ? 'required' : '';
+  adTitleElement.required = adFormValidationSetting.title.required;
   //тексты ошибок
   adTitleElement.dataset.pristineMinlengthMessage = validationPrettyErrorText.title.minLength;
   adTitleElement.dataset.pristineMaxlengthMessage = validationPrettyErrorText.title.maxLength;
   adTitleElement.dataset.pristineRequiredMessage = (adFormValidationSetting.title.required) ? validationPrettyErrorText.required : '';
 };
 
+const setPriceRelativeAttribute = () => {
+  adPriceElement.min = adFormValidationSetting.price.min[adTypeElement.value];
+  adPriceElement.placeholder = adFormValidationSetting.price.min[adTypeElement.value];
+};
+
 //функция на установку атрибутов с лимитами для поля цен
 const setPriceValidationSettings = () => {
   //атрибуты для проверок
   adPriceElement.max = adFormValidationSetting.price.max;
-  adPriceElement.required = (adFormValidationSetting.price.required) ? 'required' : '';
+  adPriceElement.required = adFormValidationSetting.price.required;
+  adPriceElement.placeholder = adFormValidationSetting.price.min[adTypeElement.value];
   //тексты ошибок
   adPriceElement.dataset.pristineMaxMessage = validationPrettyErrorText.price.max;
   adPriceElement.dataset.pristineRequiredMessage = (adFormValidationSetting.price.required) ? validationPrettyErrorText.required : '';
 };
 
-//функция на генерацию адреса нужного формата
-const prepareAddressValue = (point, coordinateLength) => `${cutNumber(point.lat, coordinateLength)}, ${cutNumber(point.lng, coordinateLength)}`;
-
 //функция на установку сетингов для адреса
 const setAddressValidationSettings = () => {
-  //указываем дефолтный адрес
-  adAddressElement.value = prepareAddressValue(adFormValidationSetting.address.startPosition, adFormValidationSetting.address.coordinateNumLength);
-  //пишем сэмпл адреса, т.к. поле обязательное и доступно только на чтение - в будущем тут будут автомато координаты с карты
-  adAddressElement.readOnly = (adFormValidationSetting.address.readonly) ? 'readonly' : '';
+  adAddressElement.readOnly = adFormValidationSetting.address.readonly;
   //атрибуты для проверок
-  adAddressElement.required = (adFormValidationSetting.address.required) ? 'required' : '';
+  adAddressElement.required = adFormValidationSetting.address.required;
   //тексты ошибок
   adAddressElement.dataset.pristineRequiredMessage = (adFormValidationSetting.address.required) ? validationPrettyErrorText.required : '';
 };
@@ -131,18 +124,21 @@ const pristine = new Pristine(adFormContainerElement, {
 pristine.addValidator(capacityElement, validateRoomCapacity, getCapacityErrorMessage);
 pristine.addValidator(adPriceElement, validateMinPrice, getMinPriceErrorMessage);
 
+const validateUserForm = (element) => pristine.validate(element);
+
 const onRoomNumberChange = () => {
-  pristine.validate(capacityElement);
+  validateUserForm(capacityElement);
 };
 
 const onTypeChange = () => {
   adPriceElement.min = adFormValidationSetting.price.min[adTypeElement.value];
   adPriceElement.placeholder = adFormValidationSetting.price.min[adTypeElement.value];
-  pristine.validate(adPriceElement);
+  validateUserForm(adPriceElement);
 };
 
-const onPriceChange = () => {
-  pristine.validate(adPriceElement);
+const onPriceChange = (cb) => {
+  cb();
+  validateUserForm(adPriceElement);
 };
 const onTimeOutChange = () => {
   adTimeInElement.value = adTimeOutElement.value;
@@ -151,23 +147,19 @@ const onTimeInChange = () => {
   adTimeOutElement.value = adTimeInElement.value;
 };
 
-roomNumberElement.addEventListener('change',onRoomNumberChange);
-adTypeElement.addEventListener('change',onTypeChange);
-adPriceElement.addEventListener('change',onPriceChange);
-adTimeOutElement.addEventListener('change',onTimeOutChange);
-adTimeInElement.addEventListener('change',onTimeInChange);
-
-adFormContainerElement.addEventListener('submit', (evt) => {
-  if (!pristine.validate()) {
-    evt.preventDefault();
-  }
-});
+const setAdRoomElementListener = () => roomNumberElement.addEventListener('change',onRoomNumberChange);
+const setAdTypeElementListener = () => adTypeElement.addEventListener('change',onTypeChange);
+const setAdTimeOutElementListener = () => adTimeOutElement.addEventListener('change',onTimeOutChange);
+const setAdPriceElementListener = (cb) => adPriceElement.addEventListener('change', () => onPriceChange(cb));
+const setAdTimeInElementListener = () => adTimeInElement.addEventListener('change',onTimeInChange);
 
 export {
-  adAddressElement,
-  adPriceElement,
-  adTypeElement,
   adFormValidationSetting,
-  onPriceChange,
-  prepareAddressValue
+  validateUserForm,
+  setPriceRelativeAttribute,
+  setAdRoomElementListener,
+  setAdTypeElementListener,
+  setAdTimeOutElementListener,
+  setAdPriceElementListener,
+  setAdTimeInElementListener
 };

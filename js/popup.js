@@ -7,6 +7,8 @@ const typeMap = {
   hotel:'Отель'
 };
 const popupTemplate = document.querySelector('#card').content.querySelector('.popup');
+const successMessageTemplateElement = document.querySelector('#success').content.querySelector('.success');
+const errorMessageTemplateElement = document.querySelector('#error').content.querySelector('.error');
 
 //функция на заполнение попапа по шаблону
 const createPopup = (element) => {
@@ -28,7 +30,7 @@ const createPopup = (element) => {
   //В список .popup__features выведите все доступные удобства в объявлении.
   const featureList = newPopup.querySelectorAll('.popup__feature');
   //проверяем что фичи пришли
-  if (element.offer.features.length === 0) {
+  if (element.offer.features === undefined) {
     newPopup.querySelector('.popup__features').remove();
   } else {
     //делаем мапу для дальнейшего сравнения с классами
@@ -41,7 +43,7 @@ const createPopup = (element) => {
     });
   }
   //В блок .popup__description выведите описание объекта недвижимости offer.description.
-  if (element.offer.description.length === 0) {
+  if (element.offer.description === undefined) {
     newPopup.querySelector('.popup__description').remove(); //злобный смех
   } else {
     newPopup.querySelector('.popup__description').textContent = element.offer.description;
@@ -51,7 +53,7 @@ const createPopup = (element) => {
   const photosList = newPopup.querySelector('.popup__photos');
   const newPhotoTemplate = photosList.querySelector('.popup__photo');
 
-  if (element.offer.photos.length === 0) {
+  if (element.offer.photos === undefined) {
     photosList.remove();
   } else {
     element.offer.photos.forEach((item) => {
@@ -67,4 +69,55 @@ const createPopup = (element) => {
 
   return newPopup;
 };
-export {createPopup};
+
+const onSuccessPopupEscKeydown = (evt) => {
+  if (evt.key === 'Escape') {
+    removeSuccessMessagePopup();
+  }
+};
+
+const onSuccessPopupClick = () => {
+  removeSuccessMessagePopup();
+};
+
+const onErrorPopupEscKeydown = (evt) => {
+  if (evt.key === 'Escape') {
+    removeErrorMessagePopup();
+  }
+};
+
+const onErrorPopupClick = () => {
+  removeErrorMessagePopup();
+};
+
+const showSuccessMessagePopup = () => {
+  const successMessageElement = successMessageTemplateElement.cloneNode(true);
+  document.body.appendChild(successMessageElement);
+  document.addEventListener('click', onSuccessPopupClick);
+  document.addEventListener('keydown', onSuccessPopupEscKeydown);
+};
+
+function removeSuccessMessagePopup () {
+  document.body.querySelector('.success').remove();
+  document.removeEventListener('click', onSuccessPopupClick);
+  document.removeEventListener('keydown', onSuccessPopupEscKeydown);
+}
+
+const showErrorMessagePopup = () => {
+  const errorMessageElement = errorMessageTemplateElement.cloneNode(true);
+  document.body.appendChild(errorMessageElement);
+  document.addEventListener('click', onErrorPopupClick);
+  document.addEventListener('keydown', onErrorPopupEscKeydown);
+};
+
+function removeErrorMessagePopup () {
+  document.body.querySelector('.error').remove();
+  document.removeEventListener('click', onErrorPopupClick);
+  document.removeEventListener('keydown', onErrorPopupEscKeydown);
+}
+
+export {
+  createPopup,
+  showSuccessMessagePopup,
+  showErrorMessagePopup
+};

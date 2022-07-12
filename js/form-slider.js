@@ -1,52 +1,62 @@
-import {adFormSliderElement} from './form.js';
 import {
   adFormValidationSetting,
-  adPriceElement,
-  adTypeElement,
-  onPriceChange
 } from './form-validation.js';
 
-//функция на установку стартового валидного значения цены
-const setValidStartPrice = () => {
-  adPriceElement.value = ( adPriceElement.value <= adFormValidationSetting.price.min[adTypeElement.value] ) ?
-    adPriceElement.value = adFormValidationSetting.price.min[adTypeElement.value] :
-    adPriceElement.value;
+const adFormSliderElement = document.querySelector('.ad-form').querySelector('.ad-form__slider');
+const adTypeElement = document.querySelector('.ad-form').querySelector( '[name="type"]');
+const adPriceElement = document.querySelector('.ad-form').querySelector( '[name="price"]');
+
+const getSliderStartPosition = () => {
+  if (adPriceElement.value === undefined) {
+    return Number(adFormValidationSetting.price.min[adTypeElement.value]);
+  }
+  return Number(adPriceElement.value);
 };
 
-noUiSlider.create(adFormSliderElement, {
-  range:{
-    min: Number(adFormValidationSetting.price.min[adTypeElement.value]),
-    max: Number(adFormValidationSetting.price.max)
-  },
-  start: Number(adFormValidationSetting.price.min[adTypeElement.value]),
-  step: 1,
-  connect: 'lower',
-  format:{
-    to: (value) => value.toFixed(0),
-    from: (value) => Number(value)
-  },
-});
+const setSlider = () => {
+  noUiSlider.create(
+    adFormSliderElement,
+    {
+      range:{
+        min: 0,
+        max: Number(adFormValidationSetting.price.max)
+      },
+      start: getSliderStartPosition(),
+      step: 1,
+      connect: 'lower',
+      format:{
+        to: (value) => value.toFixed(0),
+        from: (value) => Number(value)
+      },
+    }
+  );
+};
 
 //апдейт сеттингов слайдера
 const updateSliderSetting = () => {
   adFormSliderElement.noUiSlider.updateOptions(
     {
       range:{
-        min: Number(adFormValidationSetting.price.min[adTypeElement.value]),
+        min: 0,
         max: Number(adFormValidationSetting.price.max)
       },
-      start: setValidStartPrice()
+      start: getSliderStartPosition()
     }
   );
 };
 
-adFormSliderElement.noUiSlider.on('update', () => {
-  adPriceElement.value = adFormSliderElement.noUiSlider.get();
-  onPriceChange();
-});
+const setSliderPosition = () => adFormSliderElement.noUiSlider.set(adPriceElement.value);
 
-adTypeElement.addEventListener('change',updateSliderSetting);
+const setSliderChangeListener = (validator) => {
+  adFormSliderElement.noUiSlider.on('change', () => {
+    adPriceElement.value = adFormSliderElement.noUiSlider.get();
+    validator(adPriceElement);
+  });
+};
 
-adPriceElement.addEventListener('change',() => {
-  adFormSliderElement.noUiSlider.set(adPriceElement.value);
-});
+export {
+  setSlider,
+  updateSliderSetting,
+  setSliderPosition,
+  setSliderChangeListener
+};
