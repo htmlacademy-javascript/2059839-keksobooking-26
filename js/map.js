@@ -4,9 +4,7 @@ import {
 
 import {createPopup} from './popup.js';
 
-const SIMILLAR_AD_COUNT = 10;
 const mapContainerElement = document.querySelector( '#map-canvas');
-
 //настройки карты
 const mapStartPosition = {
   lat:35.68173,
@@ -42,6 +40,7 @@ const mainMarker = L.marker(
   },
 );
 const markerGroup = L.layerGroup();
+const defaultMarkerGroup = L.layerGroup();
 
 const createMarker = (element) => {
   const marker = L.marker(
@@ -70,6 +69,21 @@ const fillMap = () => {
 // функция на создание точек объявлений на карте и отрисовку слоя с ними
 const fillMapLayer = (array) => {
   array.forEach((element) => createMarker(element));
+};
+
+const clearMapLayer = () => {
+  markerGroup.clearLayers();
+};
+const saveDefaultMapLayer = () => {
+  markerGroup.eachLayer(
+    (layer) => layer.addTo(defaultMarkerGroup)
+  );
+};
+
+const setDefaultMapLayer = () => {
+  defaultMarkerGroup.eachLayer(
+    (layer) => layer.addTo(markerGroup)
+  );
 };
 
 //функция на установку дефолтной позиции карты
@@ -103,8 +117,7 @@ const setMapLoadState = (pageState, dataAction, onSuccessDataAction, onFailedDat
     dataAction(
       //отрисовываем метки при успешном получении данных и активируем фильтры
       (ads) => {
-        fillMapLayer( ads.slice(0,SIMILLAR_AD_COUNT) );
-        onSuccessDataAction();
+        onSuccessDataAction(ads);
       },
       () => {
         onFailedDataAction();
@@ -129,6 +142,10 @@ const setMainMarkerMoveendListener = (onMoveEndAction) => {
 export {
   setDefaultMapPosition,
   setDefaultAddressValue,
+  setDefaultMapLayer,
   setMapLoadState,
-  setMainMarkerMoveendListener
+  setMainMarkerMoveendListener,
+  fillMapLayer,
+  clearMapLayer,
+  saveDefaultMapLayer
 };

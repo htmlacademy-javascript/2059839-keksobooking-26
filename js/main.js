@@ -4,6 +4,7 @@ import {
 } from './popup.js';
 
 import {
+  disableUserForm,
   enableUserForm,
   enableMapFilter,
   disableMapFilter,
@@ -26,7 +27,11 @@ import {
   setDefaultMapPosition,
   setDefaultAddressValue,
   setMapLoadState,
-  setMainMarkerMoveendListener
+  setMainMarkerMoveendListener,
+  fillMapLayer,
+  clearMapLayer,
+  saveDefaultMapLayer,
+  setDefaultMapLayer
 } from './map.js';
 
 import {
@@ -41,29 +46,53 @@ import {
   sendData
 } from './api.js';
 
-import {showAlert} from './util.js';
+import {
+  showAlert,
+  debounce
+} from './util.js';
+import {setMapFiltersListener} from './filter.js';
+
+const SIMILLAR_AD_COUNT = 10;
+const ADS_RENDER_DELAY = 500;
+
+disableUserForm();
+disableMapFilter();
 
 // КАРТА
 //
-// указываем состояние страницы после загрузки карты и похожих объявлений
+// указываем состояние страницы после успешной загрузки карты и похожих объявлений
 setMapLoadState(
   // pageState
   () => {
-    disableMapFilter(); //пока оставляем тут, в будущем переместить в блок с логикой переводы страницы в неактивное состояние при загрузке
     enableUserForm();
+    // устанавливаем обработчик на главный пин карты и указываем какое действие при его перемещении делать
+    setMainMarkerMoveendListener(setAddressValue);
   },
   // dataAction
   getData,
   // onSuccessDataAction
-  enableMapFilter,
+  (ads) => {
+    fillMapLayer(ads.slice(0,SIMILLAR_AD_COUNT));
+    saveDefaultMapLayer();
+    enableMapFilter();
+    setMapFiltersListener(
+      // renderAction
+      (filteredAds) => {
+        clearMapLayer();
+        debounce(
+          fillMapLayer(filteredAds),
+          ADS_RENDER_DELAY
+        );
+      },
+      ads, // array
+      SIMILLAR_AD_COUNT // outputLength
+    );
+  },
   // onFailedDataAction
   () => {
     showAlert('Не удалось загрузить похожие объявления');
   }
 );
-// устанавливаем обработчик на главный пин карты и указываем какое действие при его перемещении делать
-setMainMarkerMoveendListener(setAddressValue);
-
 
 // ФОРМА
 //
@@ -91,9 +120,11 @@ setUserFormSubmit(
   sendData,
   //onValidFormAction
   () => {
+    clearMapLayer();
     setPriceRelativeAttribute();
     setDefaultMapPosition();
     setDefaultAddressValue();
+    setDefaultMapLayer();
     updateSliderSetting();
     showSuccessMessagePopup();
   },
@@ -106,9 +137,11 @@ setUserFormSubmit(
 setButtonResetListener(
   //onFormReset
   () => {
+    clearMapLayer();
     setPriceRelativeAttribute();
     setDefaultMapPosition();
     setDefaultAddressValue();
+    setDefaultMapLayer();
     updateSliderSetting();
   }
 );

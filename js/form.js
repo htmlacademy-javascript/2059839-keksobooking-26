@@ -1,6 +1,7 @@
 import {cutNumber} from './util.js';
 
 const adFormContainerElement = document.querySelector('.ad-form');
+const mapFiltersContainerElement = document.querySelector('.map__filters');
 const adFormChildrenElement = Array.from(adFormContainerElement.children);
 const adAddressElement = adFormContainerElement.querySelector( '[name="address"]');
 
@@ -68,6 +69,7 @@ const setUserFormSubmit = (validator,dataAction, onValidFormAction,onInvalidForm
         dataAction(
           () => {
             adFormContainerElement.reset();
+            mapFiltersContainerElement.reset();
             onValidFormAction();
             unblockSubmitButton();
           },
@@ -88,6 +90,7 @@ const setButtonResetListener = (onFormReset) => {
     (evt) => {
       evt.preventDefault();
       adFormContainerElement.reset();
+      mapFiltersContainerElement.reset();
       onFormReset();
     }
   );
