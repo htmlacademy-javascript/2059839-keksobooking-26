@@ -51,6 +51,12 @@ import {
   debounce
 } from './util.js';
 import {setMapFiltersListener} from './filter.js';
+import {
+  setAvatarUploadListener,
+  setPhotoUploadListener,
+  setDefaultAvatar,
+  removePhotos
+} from './file.js';
 
 const SIMILLAR_AD_COUNT = 10;
 const ADS_RENDER_DELAY = 500;
@@ -76,11 +82,11 @@ setMapLoadState(
     saveDefaultMapLayer();
     enableMapFilter();
     setMapFiltersListener(
-      // actions
+      // renderAction
       (filteredAds) => {
         clearMapLayer();
         debounce(
-          fillMapLayer(filteredAds.splice(SIMILLAR_AD_COUNT)),
+          fillMapLayer(filteredAds),
           ADS_RENDER_DELAY
         );
       },
@@ -102,6 +108,8 @@ setSlider();
 setSliderChangeListener(validateUserForm);
 
 // навешиваем обработчики c валидацией на инпуты форм
+setAvatarUploadListener();
+setPhotoUploadListener();
 setAdRoomElementListener();
 setAdTypeElementListener();
 setAdPriceElementListener(
@@ -121,6 +129,8 @@ setUserFormSubmit(
   //onValidFormAction
   () => {
     clearMapLayer();
+    setDefaultAvatar();
+    removePhotos();
     setPriceRelativeAttribute();
     setDefaultMapPosition();
     setDefaultAddressValue();
@@ -138,6 +148,8 @@ setButtonResetListener(
   //onFormReset
   () => {
     clearMapLayer();
+    setDefaultAvatar();
+    removePhotos();
     setPriceRelativeAttribute();
     setDefaultMapPosition();
     setDefaultAddressValue();
