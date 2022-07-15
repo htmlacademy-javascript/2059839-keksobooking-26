@@ -76,11 +76,11 @@ setMapLoadState(
     saveDefaultMapLayer();
     enableMapFilter();
     setMapFiltersListener(
-      // actions
+      // renderAction
       (filteredAds) => {
         clearMapLayer();
         debounce(
-          fillMapLayer(filteredAds.splice(SIMILLAR_AD_COUNT)),
+          fillMapLayer(filteredAds),
           ADS_RENDER_DELAY
         );
       },

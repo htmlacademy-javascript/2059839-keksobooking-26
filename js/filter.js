@@ -34,39 +34,10 @@ const getPriceLabel = (element) => {
   return priceLabel;
 };
 
-const filterType = (type) => {
-  if (mapFilterTypeElement.value === 'any') {
-    return true;
-  } else if (mapFilterTypeElement.value === type) {
-    return true;
-  }
-  return false;
-};
-
-const filterPrice = (price) => {
-  if (mapFilterPriceElement.value === 'any') {
-    return true;
-  } else if (mapFilterPriceElement.value === getPriceLabel(price)) {
-    return true;
-  }
-  return false;
-};
-const filterRoomsNumber = (roomsNumber) => {
-  if (mapFilterRoomNumberElement.value === 'any') {
-    return true;
-  } else if (Number(mapFilterRoomNumberElement.value) === Number(roomsNumber)) {
-    return true;
-  }
-  return false;
-};
-const filterCapacity = (guests) => {
-  if (mapFilterCapacityElement.value === 'any') {
-    return true;
-  } else if (Number(mapFilterCapacityElement.value) === Number(guests)) {
-    return true;
-  }
-  return false;
-};
+const filterType = (type) => mapFilterTypeElement.value === 'any' || mapFilterTypeElement.value === type;
+const filterPrice = (price) => mapFilterPriceElement.value === 'any' || mapFilterPriceElement.value === getPriceLabel(price);
+const filterRoomsNumber = (roomsNumber) => mapFilterRoomNumberElement.value === 'any' || Number(mapFilterRoomNumberElement.value) === Number(roomsNumber);
+const filterCapacity = (guests) => mapFilterCapacityElement.value === 'any' || Number(mapFilterCapacityElement.value) === Number(guests);
 
 const filterFeature = (features, featureName) => {
   const filterElement = mapFilterFeaturesContainerElement.querySelector( `#filter-${featureName}`);
@@ -95,8 +66,10 @@ const filterData = (array) =>
       && filterFeature(ad.offer.features,'conditioner')
     );
 
-const onMapFilterInputChange = (actions, array) => {
-  actions(filterData(array));
+const onMapFilterInputChange = (renderAction, array, outputLength) => {
+  const filteredAds = filterData(array);
+  filteredAds.splice(outputLength);
+  renderAction(filteredAds);
 };
 
 
