@@ -72,10 +72,7 @@ setMapLoadState(
   getData,
   // onSuccessDataAction
   (ads) => {
-    fillMapLayer(
-      ads.slice(),
-      SIMILLAR_AD_COUNT
-    );
+    fillMapLayer(ads.slice(0,SIMILLAR_AD_COUNT));
     saveDefaultMapLayer();
     enableMapFilter();
     setMapFiltersListener(
@@ -83,7 +80,7 @@ setMapLoadState(
       (filteredAds) => {
         clearMapLayer();
         debounce(
-          fillMapLayer(filteredAds, SIMILLAR_AD_COUNT),
+          fillMapLayer(filteredAds.splice(SIMILLAR_AD_COUNT)),
           ADS_RENDER_DELAY
         );
       },
