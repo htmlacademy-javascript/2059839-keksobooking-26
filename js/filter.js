@@ -100,9 +100,9 @@ const onMapFilterInputChange = (actions, array) => {
 };
 
 
-const setMapFiltersListener = (actionBeforeFiltration, actionAfterFiltration, array, outputLength) => {
+const setMapFiltersListener = (actions, array) => {
   mapFiltersContainerElement.addEventListener('change',
-    () => onMapFilterInputChange(actionBeforeFiltration, actionAfterFiltration, array, outputLength)
+    () => onMapFilterInputChange(actions, array)
   );
 };
 

@@ -82,7 +82,7 @@ setMapLoadState(
     saveDefaultMapLayer();
     enableMapFilter();
     setMapFiltersListener(
-      // renderAction
+      // actions
       (filteredAds) => {
         clearMapLayer();
         debounce(
