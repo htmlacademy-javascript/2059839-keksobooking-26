@@ -35,26 +35,34 @@ const getPriceLabel = (element) => {
 };
 
 const filterType = (type) => {
-  if (mapFilterTypeElement.value === 'any' || mapFilterTypeElement.value === type) {
+  if (mapFilterTypeElement.value === 'any') {
+    return true;
+  } else if (mapFilterTypeElement.value === type) {
     return true;
   }
   return false;
 };
 
 const filterPrice = (price) => {
-  if (mapFilterPriceElement.value === 'any' || mapFilterPriceElement.value === getPriceLabel(price)) {
+  if (mapFilterPriceElement.value === 'any') {
+    return true;
+  } else if (mapFilterPriceElement.value === getPriceLabel(price)) {
     return true;
   }
   return false;
 };
 const filterRoomsNumber = (roomsNumber) => {
-  if (mapFilterRoomNumberElement.value === 'any' || Number(mapFilterRoomNumberElement.value) === Number(roomsNumber)) {
+  if (mapFilterRoomNumberElement.value === 'any') {
+    return true;
+  } else if (Number(mapFilterRoomNumberElement.value) === Number(roomsNumber)) {
     return true;
   }
   return false;
 };
 const filterCapacity = (guests) => {
-  if (mapFilterCapacityElement.value === 'any' || Number(mapFilterCapacityElement.value) === Number(guests)) {
+  if (mapFilterCapacityElement.value === 'any') {
+    return true;
+  } else if (Number(mapFilterCapacityElement.value) === Number(guests)) {
     return true;
   }
   return false;
@@ -72,8 +80,8 @@ const filterFeature = (features, featureName) => {
   return true;
 };
 
-const filterData = (array, outputLength) => {
-  const resultArray =  array
+const filterData = (array) =>
+  array
     .filter((ad) =>
       filterType(ad.offer.type)
       && filterPrice(ad.offer.price)
@@ -86,12 +94,9 @@ const filterData = (array, outputLength) => {
       && filterFeature(ad.offer.features,'elevator')
       && filterFeature(ad.offer.features,'conditioner')
     );
-  resultArray.splice(outputLength);
-  return resultArray;
-};
 
-const onMapFilterInputChange = (actions, array, outputLength) => {
-  actions(filterData(array, outputLength));
+const onMapFilterInputChange = (actions, array) => {
+  actions(filterData(array));
 };
 
 
