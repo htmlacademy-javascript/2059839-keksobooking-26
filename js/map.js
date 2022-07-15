@@ -5,7 +5,6 @@ import {
 import {createPopup} from './popup.js';
 
 const mapContainerElement = document.querySelector( '#map-canvas');
-const SIMILLAR_AD_COUNT = 10;
 //настройки карты
 const mapStartPosition = {
   lat:35.68173,
@@ -118,8 +117,6 @@ const setMapLoadState = (pageState, dataAction, onSuccessDataAction, onFailedDat
     dataAction(
       //отрисовываем метки при успешном получении данных и активируем фильтры
       (ads) => {
-        fillMapLayer( ads.slice(0,SIMILLAR_AD_COUNT) );
-        saveDefaultMapLayer();
         onSuccessDataAction(ads);
       },
       () => {
@@ -149,5 +146,6 @@ export {
   setMapLoadState,
   setMainMarkerMoveendListener,
   fillMapLayer,
-  clearMapLayer
+  clearMapLayer,
+  saveDefaultMapLayer
 };

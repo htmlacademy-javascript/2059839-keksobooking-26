@@ -30,6 +30,7 @@ import {
   setMainMarkerMoveendListener,
   fillMapLayer,
   clearMapLayer,
+  saveDefaultMapLayer,
   setDefaultMapLayer
 } from './map.js';
 
@@ -71,6 +72,8 @@ setMapLoadState(
   getData,
   // onSuccessDataAction
   (ads) => {
+    fillMapLayer( ads.slice(0,SIMILLAR_AD_COUNT) );
+    saveDefaultMapLayer();
     enableMapFilter();
     setMapFiltersListener(
       // actions
