@@ -71,9 +71,8 @@ const fillMapLayer = (array) => {
   array.forEach((element) => createMarker(element));
 };
 
-const clearMapLayer = () => {
-  markerGroup.clearLayers();
-};
+const clearMapLayer = () => markerGroup.clearLayers();
+
 const saveDefaultMapLayer = () => {
   markerGroup.eachLayer(
     (layer) => layer.addTo(defaultMarkerGroup)
@@ -105,9 +104,7 @@ const setDefaultMapPosition = () => {
   );
 };
 
-const setDefaultAddressValue = () => {
-  setAddressValue(mainMarker.getLatLng(), mapStartPosition.coordinateNumLength);
-};
+const setDefaultAddressValue = () => setAddressValue(mainMarker.getLatLng(), mapStartPosition.coordinateNumLength);
 
 const setMapLoadState = (pageState, dataAction, onSuccessDataAction, onFailedDataAction) => {
   map.on('load', () => {

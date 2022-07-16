@@ -11,6 +11,10 @@ const errorMessageTemplateElement = document.querySelector('#error').content.que
 
 const createPopup = (element) => {
   const newPopupElement = popupTemplateElement.cloneNode(true);
+  const featureListElement = newPopupElement.querySelectorAll('.popup__feature');
+  const photosListElement = newPopupElement.querySelector('.popup__photos');
+  const newPhotoTemplate = photosListElement.querySelector('.popup__photo');
+
   newPopupElement.querySelector('.popup__title').textContent = element.offer.title;
   newPopupElement.querySelector('.popup__text--address').textContent = element.offer.address;
   newPopupElement.querySelector('.popup__text--price').textContent = `${element.offer.price} `;
@@ -18,7 +22,6 @@ const createPopup = (element) => {
   newPopupElement.querySelector('.popup__text--capacity').textContent = `${element.offer.rooms} комнаты для ${element.offer.guests} гостей`;
   newPopupElement.querySelector('.popup__type').textContent = typeMap[element.offer.type];
   newPopupElement.querySelector('.popup__text--time').textContent = `Заезд после ${element.offer.checkin}, выезд до ${element.offer.checkout}`;
-  const featureListElement = newPopupElement.querySelectorAll('.popup__feature');
 
   if (element.offer.features === undefined) {
     newPopupElement.querySelector('.popup__features').remove();
@@ -39,9 +42,6 @@ const createPopup = (element) => {
   } else {
     newPopupElement.querySelector('.popup__description').textContent = element.offer.description;
   }
-
-  const photosListElement = newPopupElement.querySelector('.popup__photos');
-  const newPhotoTemplate = photosListElement.querySelector('.popup__photo');
 
   if (element.offer.photos === undefined) {
     photosListElement.remove();
@@ -64,9 +64,7 @@ const onSuccessPopupEscKeydown = (evt) => {
   }
 };
 
-const onSuccessPopupClick = () => {
-  removeSuccessMessagePopup();
-};
+const onSuccessPopupClick = () => removeSuccessMessagePopup();
 
 const onErrorPopupEscKeydown = (evt) => {
   if (evt.key === 'Escape') {
@@ -74,9 +72,7 @@ const onErrorPopupEscKeydown = (evt) => {
   }
 };
 
-const onErrorPopupClick = () => {
-  removeErrorMessagePopup();
-};
+const onErrorPopupClick = () => removeErrorMessagePopup();
 
 const showSuccessMessagePopup = () => {
   const successMessageElement = successMessageTemplateElement.cloneNode(true);

@@ -126,9 +126,7 @@ pristine.addValidator(adPriceElement, validateMinPrice, getMinPriceErrorMessage)
 
 const validateUserForm = (element) => pristine.validate(element);
 
-const onRoomNumberChange = () => {
-  validateUserForm(capacityElement);
-};
+const onRoomNumberChange = () => validateUserForm(capacityElement);
 
 const onTypeChange = () => {
   adPriceElement.min = adFormValidationSetting.price.min[adTypeElement.value];
