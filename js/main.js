@@ -85,13 +85,13 @@ setMapLoadState(
       // renderAction
       (filteredAds) => {
         clearMapLayer();
+        filteredAds.splice(SIMILLAR_AD_COUNT);
         debounce(
           fillMapLayer(filteredAds),
           ADS_RENDER_DELAY
         );
       },
-      ads, // array
-      SIMILLAR_AD_COUNT // outputLength
+      ads
     );
   },
   // onFailedDataAction

@@ -66,10 +66,8 @@ const filterData = (array) =>
       && filterFeature(ad.offer.features,'conditioner')
     );
 
-const onMapFilterInputChange = (renderAction, array, outputLength) => {
-  const filteredAds = filterData(array);
-  filteredAds.splice(outputLength);
-  renderAction(filteredAds);
+const onMapFilterInputChange = (actions, array) => {
+  actions(filterData(array));
 };
 
 
