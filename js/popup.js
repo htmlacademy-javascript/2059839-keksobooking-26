@@ -35,7 +35,7 @@ const createPopup = (element) => {
   }
 
   if (element.offer.description === undefined) {
-    newPopup.querySelector('.popup__description').remove(); //злобный смех
+    newPopup.querySelector('.popup__description').remove();
   } else {
     newPopup.querySelector('.popup__description').textContent = element.offer.description;
   }

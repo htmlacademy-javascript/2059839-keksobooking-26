@@ -60,6 +60,7 @@ import {
 
 const SIMILLAR_AD_COUNT = 10;
 const ADS_RENDER_DELAY = 500;
+const ALERT_SHOW_TIME = 10000;
 
 disableUserForm();
 disableMapFilter();
@@ -82,7 +83,7 @@ setMapLoadState(
     saveDefaultMapLayer();
     enableMapFilter();
     setMapFiltersListener(
-      // renderAction
+      // actions
       (filteredAds) => {
         clearMapLayer();
         filteredAds.splice(SIMILLAR_AD_COUNT);
@@ -96,7 +97,7 @@ setMapLoadState(
   },
   // onFailedDataAction
   () => {
-    showAlert('Не удалось загрузить похожие объявления');
+    showAlert('Не удалось загрузить похожие объявления', ALERT_SHOW_TIME);
   }
 );
 
