@@ -13,7 +13,7 @@ const createPopup = (element) => {
   const newPopupElement = popupTemplateElement.cloneNode(true);
   const featureListElement = newPopupElement.querySelectorAll('.popup__feature');
   const photosListElement = newPopupElement.querySelector('.popup__photos');
-  const newPhotoTemplate = photosListElement.querySelector('.popup__photo');
+  const newPhotoTemplateElement = photosListElement.querySelector('.popup__photo');
 
   newPopupElement.querySelector('.popup__title').textContent = element.offer.title;
   newPopupElement.querySelector('.popup__text--address').textContent = element.offer.address;
@@ -47,9 +47,9 @@ const createPopup = (element) => {
     photosListElement.remove();
   } else {
     element.offer.photos.forEach((item) => {
-      const newImg = newPhotoTemplate.cloneNode(true);
-      newImg.src = item;
-      photosListElement.appendChild(newImg);
+      const newPhotoElement = newPhotoTemplateElement.cloneNode(true);
+      newPhotoElement.src = item;
+      photosListElement.appendChild(newPhotoElement);
     });
     photosListElement.children[0].remove();
   }
