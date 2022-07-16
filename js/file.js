@@ -31,9 +31,9 @@ const removePhotos = () => {
 const onPhotoUpload = () => {
   removePhotos();
   const fileName = photoUploaderElement.files[0].name.toLowerCase();
-  const matches = FILE_TYPES.some((item) => fileName.endsWith(item));
+  const isImage = FILE_TYPES.some((item) => fileName.endsWith(item));
 
-  if (matches) {
+  if (isImage) {
     createPhotoPreviewElement();
     photoPreviewContainerElement.querySelector('.ad-form__photo img').src = URL.createObjectURL(photoUploaderElement.files[0]);
   }
@@ -41,9 +41,9 @@ const onPhotoUpload = () => {
 
 const onAvatarUpload = () => {
   const fileName = avatarUploaderElement.files[0].name.toLowerCase();
-  const matches = FILE_TYPES.some((item) => fileName.endsWith(item));
+  const isImage = FILE_TYPES.some((item) => fileName.endsWith(item));
 
-  if (matches) {
+  if (isImage) {
     avatarPreviewElement.src = URL.createObjectURL(avatarUploaderElement.files[0]);
   }
 };

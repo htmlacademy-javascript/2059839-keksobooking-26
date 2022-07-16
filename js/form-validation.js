@@ -56,7 +56,7 @@ const adFormValidationSetting = {
   },
   'address':{
     'required':true,
-    'readonly':true
+    'readOnly':true
   }
 };
 
@@ -90,7 +90,7 @@ const setPriceValidationSettings = () => {
 
 //функция на установку сетингов для адреса
 const setAddressValidationSettings = () => {
-  adAddressElement.readOnly = adFormValidationSetting.address.readonly;
+  adAddressElement.readOnly = adFormValidationSetting.address.readOnly;
   //атрибуты для проверок
   adAddressElement.required = adFormValidationSetting.address.required;
   //тексты ошибок
