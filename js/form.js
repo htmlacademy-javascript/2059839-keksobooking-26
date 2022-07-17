@@ -17,31 +17,35 @@ const buttonResetElement = adFormContainerElement.querySelector( '.ad-form__rese
 const disableMapFilter = () => {
   mapFilterContainerElement.classList.add('map__filters--disabled');
 
-  mapFilterChildrenElement.forEach( (mapFilter) => {
-    mapFilter.disabled = true;
-  });
+  for (let i = 0; i < mapFilterChildrenElement.length; i++) {
+    mapFilterChildrenElement[i].disabled = true;
+  }
 };
 
 const enableMapFilter = () => {
   mapFilterContainerElement.classList.remove('map__filters--disabled');
-  mapFilterChildrenElement.forEach( (mapFilter) => {
-    mapFilter.disabled = false;
-  });
+
+  for (let i = 0; i < mapFilterChildrenElement.length; i++) {
+    mapFilterChildrenElement[i].disabled = false;
+  }
 };
 
 const disableUserForm = () => {
   adFormContainerElement.classList.add('ad-form--disabled');
-  adFormChildrenElement.forEach( (adFormItem) => {
-    adFormItem.disabled = true;
-  });
+
+  for (let i = 0; i < adFormChildrenElement.length; i++) {
+    adFormChildrenElement[i].disabled = true;
+  }
+
   adFormSliderElement.disabled = true;
 };
 
 const enableUserForm = () => {
   adFormContainerElement.classList.remove('ad-form--disabled');
-  adFormChildrenElement.forEach( (adFormItem) => {
-    adFormItem.disabled = false;
-  });
+
+  for (let i = 0; i < adFormChildrenElement.length; i++) {
+    adFormChildrenElement[i].disabled = false;
+  }
   adFormSliderElement.disabled = false;
 };
 

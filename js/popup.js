@@ -28,13 +28,13 @@ const createPopup = (element) => {
   } else {
     const modifiers = element.offer.features.map( (feature) => `popup__feature popup__feature--${feature}` );
 
-    featureListElement.forEach( (featureElement) => {
-      const modifier = featureElement.className;
+    for (let i = 0; i < featureListElement.length; i++) {
+      const modifier = featureListElement[i].className;
 
       if ( !modifiers.includes(modifier) ) {
-        featureElement.remove();
+        featureListElement[i].remove();
       }
-    });
+    }
   }
 
   if (element.offer.description === undefined) {
@@ -46,11 +46,12 @@ const createPopup = (element) => {
   if (element.offer.photos === undefined) {
     photosListElement.remove();
   } else {
-    element.offer.photos.forEach((item) => {
+
+    for (let i = 0; i < element.offer.photos.length; i++) {
       const newPhotoElement = newPhotoTemplateElement.cloneNode(true);
-      newPhotoElement.src = item;
+      newPhotoElement.src = element.offer.photos[i];
       photosListElement.appendChild(newPhotoElement);
-    });
+    }
     photosListElement.children[0].remove();
   }
 

@@ -68,7 +68,9 @@ const fillMap = () => {
 
 // функция на создание точек объявлений на карте и отрисовку слоя с ними
 const fillMapLayer = (array) => {
-  array.forEach((element) => createMarker(element));
+  for (let i = 0; i < array.length; i++) {
+    createMarker(array[i]);
+  }
 };
 
 const clearMapLayer = () => markerGroup.clearLayers();
