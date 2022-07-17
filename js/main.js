@@ -62,6 +62,7 @@ import {
 const SIMILLAR_AD_COUNT = 10;
 const ADS_RENDER_DELAY = 500;
 const ALERT_SHOW_TIME = 10000;
+const similarAdsLoadingErrorMessage = 'Не удалось загрузить похожие объявления';
 
 disableUserForm();
 disableMapFilter();
@@ -78,7 +79,7 @@ setMapLoadState(
   },
   // dataAction
   getData,
-  // onSuccessDataAction
+  // onSuccessDataLoad
   (ads) => {
     fillMapLayer(ads.slice(0,SIMILLAR_AD_COUNT));
     saveDefaultMapLayer();
@@ -96,9 +97,9 @@ setMapLoadState(
       ads
     );
   },
-  // onFailedDataAction
+  // onFailedDataLoad
   () => {
-    showAlert('Не удалось загрузить похожие объявления', ALERT_SHOW_TIME);
+    showAlert(similarAdsLoadingErrorMessage, ALERT_SHOW_TIME);
   }
 );
 
@@ -139,6 +140,7 @@ setUserFormSubmit(
   //onInvalidFormAction
   showErrorMessagePopup
 );
+
 //указываем, что делать при сбросе формы
 setButtonResetListener(
   //onFormResetActions

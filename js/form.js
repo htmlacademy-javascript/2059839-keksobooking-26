@@ -65,7 +65,7 @@ const unblockSubmitButton = () => {
 
 const onUserFormSubmit = (evt, validator, dataAction, onValidFormAction, onInvalidFormAction) => {
   evt.preventDefault();
-  if (validator) {
+  if (validator()) {
     blockSubmitButton();
     dataAction(
       () => {
