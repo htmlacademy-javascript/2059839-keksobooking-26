@@ -32,20 +32,8 @@ const setSlider = () => {
   );
 };
 
-//апдейт сеттингов слайдера
-const updateSliderSetting = () => {
-  adFormSliderElement.noUiSlider.updateOptions(
-    {
-      range:{
-        min: 0,
-        max: adFormValidationSetting.price.max
-      },
-      start: getSliderStartPosition()
-    }
-  );
-};
-
 const setSliderPosition = () => adFormSliderElement.noUiSlider.set(adPriceElement.value);
+const updateSliderPosition = () => setSliderPosition( getSliderStartPosition() );
 
 const onSliderChange = (validator) => {
   adPriceElement.value = adFormSliderElement.noUiSlider.get();
@@ -56,7 +44,7 @@ const setSliderChangeListener = (validator) => adFormSliderElement.noUiSlider.on
 
 export {
   setSlider,
-  updateSliderSetting,
+  updateSliderPosition,
   setSliderPosition,
   setSliderChangeListener
 };

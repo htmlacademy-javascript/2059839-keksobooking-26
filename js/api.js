@@ -1,4 +1,4 @@
-const serverAddressForGettingData = 'https://28.javascript.pages.academy/keksobooking/data';
+const serverAddressForGettingData = 'https://26.javascript.pages.academy/keksobooking/data';
 const serverAddressForSendingData = 'https://26.javascript.pages.academy/keksobooking';
 const similarAdsLoadingErrorMessage = 'Не удалось загрузить похожие объявления';
 

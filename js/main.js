@@ -37,7 +37,7 @@ import {
 
 import {
   setSlider,
-  updateSliderSetting,
+  updateSliderPosition,
   setSliderPosition,
   setSliderChangeListener
 } from './form-slider.js';
@@ -135,7 +135,7 @@ setUserFormSubmit(
     setDefaultMapPosition();
     setDefaultAddressValue();
     setDefaultMapLayer();
-    updateSliderSetting();
+    updateSliderPosition();
     showSuccessMessagePopup();
   },
   //onInvalidFormAction
@@ -154,6 +154,6 @@ setButtonResetListener(
     setDefaultMapPosition();
     setDefaultAddressValue();
     setDefaultMapLayer();
-    updateSliderSetting();
+    updateSliderPosition();
   }
 );

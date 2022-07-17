@@ -23,7 +23,7 @@ const showAlert = (message, showTime) => {
   alertContainerElement.style.right = alertMessageSetting.style.right;
   alertContainerElement.style.padding = alertMessageSetting.style.padding;
   alertContainerElement.style.fontSize = alertMessageSetting.style.fontSize;
-  alertContainerElement.style.textAlign = alertMessageSetting.style.fontSize;
+  alertContainerElement.style.textAlign = alertMessageSetting.style.textAlign;
   alertContainerElement.style.backgroundColor = alertMessageSetting.style.backgroundColor;
 
   alertContainerElement.textContent = message;
