@@ -1,9 +1,16 @@
 const mapFiltersContainerElement = document.querySelector('.map__filters');
+
 const mapFilterTypeElement = mapFiltersContainerElement.querySelector( '[name="housing-type"]');
 const mapFilterPriceElement = mapFiltersContainerElement.querySelector( '[name="housing-price"]');
 const mapFilterRoomNumberElement = mapFiltersContainerElement.querySelector( '[name="housing-rooms"]');
 const mapFilterCapacityElement = mapFiltersContainerElement.querySelector( '[name="housing-guests"]');
-const mapFilterFeaturesContainerElement = mapFiltersContainerElement.querySelector( '.map__features');
+
+const mapWifiFilterElement = mapFiltersContainerElement.querySelector( '#filter-wifi');
+const mapDishwasherFilterElement = mapFiltersContainerElement.querySelector( '#filter-dishwasher');
+const mapParkingFilterElement = mapFiltersContainerElement.querySelector( '#filter-parking');
+const mapWasherFilterElement = mapFiltersContainerElement.querySelector( '#filter-washer');
+const mapElevatorFilterElement = mapFiltersContainerElement.querySelector( '#filter-elevator');
+const mapConditionerFilterElement = mapFiltersContainerElement.querySelector( '#filter-conditioner');
 
 const filterPriceRange = {
   low:{
@@ -21,13 +28,13 @@ const filterPriceRange = {
 
 const getPriceLabel = (element) => {
   let priceLabel = 'any';
-  if ( Number(element) >= Number(filterPriceRange.low.min) && Number(element) < Number(filterPriceRange.low.max) ) {
+  if ( Number(element) >= filterPriceRange.low.min && Number(element) < filterPriceRange.low.max ) {
     priceLabel = 'low';
   }
-  if ( Number(element) >= Number(filterPriceRange.middle.min) && Number(element) < Number(filterPriceRange.middle.max) ) {
+  if ( Number(element) >= filterPriceRange.middle.min && Number(element) < filterPriceRange.middle.max ) {
     priceLabel = 'middle';
   }
-  if ( Number(element) >= Number(filterPriceRange.high.min) ) {
+  if ( Number(element) >= filterPriceRange.high.min ) {
     priceLabel = 'high';
   }
 
@@ -39,12 +46,11 @@ const filterPrice = (price) => mapFilterPriceElement.value === 'any' || mapFilte
 const filterRoomsNumber = (roomsNumber) => mapFilterRoomNumberElement.value === 'any' || Number(mapFilterRoomNumberElement.value) === Number(roomsNumber);
 const filterCapacity = (guests) => mapFilterCapacityElement.value === 'any' || Number(mapFilterCapacityElement.value) === Number(guests);
 
-const filterFeature = (features, featureName) => {
-  const filterElement = mapFilterFeaturesContainerElement.querySelector( `#filter-${featureName}`);
-  if (filterElement.checked) {
+const filterFeature = (features, featureElement) => {
+  if (featureElement.checked) {
     if (features === undefined) {
       return false;
-    } else if (!features.includes(filterElement.value)) {
+    } else if (!features.includes(featureElement.value)) {
       return false;
     }
   }
@@ -58,12 +64,12 @@ const filterData = (array) =>
       && filterPrice(ad.offer.price)
       && filterRoomsNumber(ad.offer.rooms)
       && filterCapacity(ad.offer.guests)
-      && filterFeature(ad.offer.features,'wifi')
-      && filterFeature(ad.offer.features,'dishwasher')
-      && filterFeature(ad.offer.features,'parking')
-      && filterFeature(ad.offer.features,'washer')
-      && filterFeature(ad.offer.features,'elevator')
-      && filterFeature(ad.offer.features,'conditioner')
+      && filterFeature(ad.offer.features, mapWifiFilterElement)
+      && filterFeature(ad.offer.features, mapDishwasherFilterElement)
+      && filterFeature(ad.offer.features, mapParkingFilterElement)
+      && filterFeature(ad.offer.features, mapWasherFilterElement)
+      && filterFeature(ad.offer.features, mapElevatorFilterElement)
+      && filterFeature(ad.offer.features, mapConditionerFilterElement)
     );
 
 const onMapFilterInputChange = (actions, array) => actions(filterData(array));
