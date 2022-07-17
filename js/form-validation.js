@@ -103,7 +103,7 @@ const validateRoomCapacity = () => adFormValidationSetting.capacity.roomNumberOp
 //функция на возврат текста ошибки при невалидном выборе мест
 const getCapacityErrorMessage = () => validationPrettyErrorText.capacity[roomNumberElement.value];
 
-const validateMinPrice = () => Number(adPriceElement.value) >= Number(adFormValidationSetting.price.min[adTypeElement.value]);
+const validateMinPrice = () => Number(adPriceElement.value) >= adFormValidationSetting.price.min[adTypeElement.value];
 
 const getMinPriceErrorMessage = () => `${validationPrettyErrorText.price.min}${adFormValidationSetting.price.min[adTypeElement.value]} руб.`;
 //выставляем настройки в дом перед созданием валидатора

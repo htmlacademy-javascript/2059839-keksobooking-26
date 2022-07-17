@@ -47,7 +47,6 @@ const createPopup = (element) => {
   if (element.offer.photos === undefined) {
     photosListElement.remove();
   } else {
-
     for (let i = 0; i < element.offer.photos.length; i++) {
       const newPhotoElement = newPhotoTemplateElement.cloneNode(true);
       newPhotoElement.src = element.offer.photos[i];

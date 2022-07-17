@@ -8,7 +8,7 @@ const adPriceElement = document.querySelector('.ad-form').querySelector( '[name=
 
 const getSliderStartPosition = () => {
   if (adPriceElement.value === undefined) {
-    return Number(adFormValidationSetting.price.min[adTypeElement.value]);
+    return adFormValidationSetting.price.min[adTypeElement.value];
   }
   return Number(adPriceElement.value);
 };
@@ -19,7 +19,7 @@ const setSlider = () => {
     {
       range:{
         min: 0,
-        max: Number(adFormValidationSetting.price.max)
+        max: adFormValidationSetting.price.max
       },
       start: getSliderStartPosition(),
       step: 1,
@@ -38,7 +38,7 @@ const updateSliderSetting = () => {
     {
       range:{
         min: 0,
-        max: Number(adFormValidationSetting.price.max)
+        max: adFormValidationSetting.price.max
       },
       start: getSliderStartPosition()
     }

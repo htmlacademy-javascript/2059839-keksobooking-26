@@ -28,13 +28,13 @@ const filterPriceRange = {
 
 const getPriceLabel = (element) => {
   let priceLabel = 'any';
-  if ( Number(element) >= filterPriceRange.low.min && Number(element) < filterPriceRange.low.max ) {
+  if ( element >= filterPriceRange.low.min && element < filterPriceRange.low.max ) {
     priceLabel = 'low';
   }
-  if ( Number(element) >= filterPriceRange.middle.min && Number(element) < filterPriceRange.middle.max ) {
+  if ( element >= filterPriceRange.middle.min && element < filterPriceRange.middle.max ) {
     priceLabel = 'middle';
   }
-  if ( Number(element) >= filterPriceRange.high.min ) {
+  if ( element >= filterPriceRange.high.min ) {
     priceLabel = 'high';
   }
 
@@ -43,8 +43,8 @@ const getPriceLabel = (element) => {
 
 const filterType = (type) => mapFilterTypeElement.value === 'any' || mapFilterTypeElement.value === type;
 const filterPrice = (price) => mapFilterPriceElement.value === 'any' || mapFilterPriceElement.value === getPriceLabel(price);
-const filterRoomsNumber = (roomsNumber) => mapFilterRoomNumberElement.value === 'any' || Number(mapFilterRoomNumberElement.value) === Number(roomsNumber);
-const filterCapacity = (guests) => mapFilterCapacityElement.value === 'any' || Number(mapFilterCapacityElement.value) === Number(guests);
+const filterRoomsNumber = (roomsNumber) => mapFilterRoomNumberElement.value === 'any' || Number(mapFilterRoomNumberElement.value) === roomsNumber;
+const filterCapacity = (guests) => mapFilterCapacityElement.value === 'any' || Number(mapFilterCapacityElement.value) === guests;
 
 const filterFeature = (features, featureElement) => {
   if (featureElement.checked) {
