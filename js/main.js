@@ -27,7 +27,7 @@ import {
 import {
   setDefaultMapPosition,
   setDefaultAddressValue,
-  setMapLoadState,
+  setMapLoadListener,
   setMainMarkerMoveendListener,
   fillMapLayer,
   clearMapLayer,
@@ -69,8 +69,8 @@ disableMapFilter();
 
 // КАРТА
 //
-// указываем состояние страницы после успешной загрузки карты и похожих объявлений
-setMapLoadState(
+// устанавливаем обработчик на загрузку карты и указываем состояние страницы после ее успешной загрузки и загрузки похожих объявлений
+setMapLoadListener(
   // pageState
   () => {
     enableUserForm();
