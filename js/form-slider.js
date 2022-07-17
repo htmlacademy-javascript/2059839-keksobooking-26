@@ -47,12 +47,12 @@ const updateSliderSetting = () => {
 
 const setSliderPosition = () => adFormSliderElement.noUiSlider.set(adPriceElement.value);
 
-const setSliderChangeListener = (validator) => {
-  adFormSliderElement.noUiSlider.on('change', () => {
-    adPriceElement.value = adFormSliderElement.noUiSlider.get();
-    validator(adPriceElement);
-  });
+const onSliderChange = (validator) => {
+  adPriceElement.value = adFormSliderElement.noUiSlider.get();
+  validator(adPriceElement);
 };
+
+const setSliderChangeListener = (validator) => adFormSliderElement.noUiSlider.on('change', () => onSliderChange(validator));
 
 export {
   setSlider,

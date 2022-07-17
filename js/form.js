@@ -63,42 +63,36 @@ const unblockSubmitButton = () => {
   buttonSubmitElement.textContent = 'Опубликовать';
 };
 
-const setUserFormSubmit = (validator,dataAction, onValidFormAction,onInvalidFormAction) => {
-  adFormContainerElement.addEventListener(
-    'submit',
-    (evt) => {
-      evt.preventDefault();
-      if (validator) {
-        blockSubmitButton();
-        dataAction(
-          () => {
-            adFormContainerElement.reset();
-            mapFiltersContainerElement.reset();
-            onValidFormAction();
-            unblockSubmitButton();
-          },
-          () => {
-            onInvalidFormAction();
-            unblockSubmitButton();
-          },
-          new FormData(evt.target)
-        );
-      }
-    }
-  );
+const onUserFormSubmit = (evt, validator, dataAction, onValidFormAction, onInvalidFormAction) => {
+  evt.preventDefault();
+  if (validator) {
+    blockSubmitButton();
+    dataAction(
+      () => {
+        adFormContainerElement.reset();
+        mapFiltersContainerElement.reset();
+        onValidFormAction();
+        unblockSubmitButton();
+      },
+      () => {
+        onInvalidFormAction();
+        unblockSubmitButton();
+      },
+      new FormData(evt.target)
+    );
+  }
 };
 
-const setButtonResetListener = (onFormReset) => {
-  buttonResetElement.addEventListener(
-    'click',
-    (evt) => {
-      evt.preventDefault();
-      adFormContainerElement.reset();
-      mapFiltersContainerElement.reset();
-      onFormReset();
-    }
-  );
+const onUserFormReset = (evt, onFormResetActions) => {
+  evt.preventDefault();
+  adFormContainerElement.reset();
+  mapFiltersContainerElement.reset();
+  onFormResetActions();
 };
+
+const setUserFormSubmit = (validator, dataAction, onValidFormAction, onInvalidFormAction) => adFormContainerElement.addEventListener('submit', (evt) => onUserFormSubmit(evt, validator, dataAction, onValidFormAction, onInvalidFormAction));
+
+const setButtonResetListener = (onFormResetActions) => buttonResetElement.addEventListener('click', (evt) => onUserFormReset(evt, onFormResetActions));
 
 export {
   enableUserForm,

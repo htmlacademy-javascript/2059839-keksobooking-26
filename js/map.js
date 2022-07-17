@@ -132,11 +132,7 @@ const setMapLoadState = (pageState, dataAction, onSuccessDataAction, onFailedDat
     );
 };
 
-const setMainMarkerMoveendListener = (onMoveEndAction) => {
-  mainMarker.on('moveend', (evt) => {
-    onMoveEndAction(evt.target.getLatLng(), mapStartPosition.coordinateNumLength);
-  });
-};
+const setMainMarkerMoveendListener = (onMoveEndAction) => mainMarker.on('moveend', (evt) => onMoveEndAction(evt.target.getLatLng(), mapStartPosition.coordinateNumLength));
 
 export {
   setDefaultMapPosition,

@@ -113,11 +113,7 @@ setAvatarUploadListener();
 setPhotoUploadListener();
 setAdRoomElementListener();
 setAdTypeElementListener();
-setAdPriceElementListener(
-  () => {
-    setSliderPosition();
-  }
-);
+setAdPriceElementListener(setSliderPosition);
 setAdTimeOutElementListener();
 setAdTimeInElementListener();
 
@@ -140,9 +136,7 @@ setUserFormSubmit(
     showSuccessMessagePopup();
   },
   //onInvalidFormAction
-  () => {
-    showErrorMessagePopup();
-  }
+  showErrorMessagePopup
 );
 //указываем, что делать при сбросе формы
 setButtonResetListener(

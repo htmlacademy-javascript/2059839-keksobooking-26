@@ -66,16 +66,9 @@ const filterData = (array) =>
       && filterFeature(ad.offer.features,'conditioner')
     );
 
-const onMapFilterInputChange = (actions, array) => {
-  actions(filterData(array));
-};
+const onMapFilterInputChange = (actions, array) => actions(filterData(array));
 
-
-const setMapFiltersListener = (actions, array) => {
-  mapFiltersContainerElement.addEventListener('change',
-    () => onMapFilterInputChange(actions, array)
-  );
-};
+const setMapFiltersListener = (actions, array) => mapFiltersContainerElement.addEventListener('change', () => onMapFilterInputChange(actions, array));
 
 export {
   setMapFiltersListener
