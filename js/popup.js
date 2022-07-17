@@ -1,3 +1,4 @@
+import {isEscPressed} from './util.js';
 const typeMap = {
   palace: 'Дворец',
   flat:'Квартира',
@@ -59,16 +60,16 @@ const createPopup = (element) => {
   return newPopupElement;
 };
 
-const onSuccessPopupEscKeydown = (evt) => {
-  if (evt.key === 'Escape') {
+const onSuccessPopupEscKeydown = () => {
+  if (isEscPressed) {
     removeSuccessMessagePopup();
   }
 };
 
 const onSuccessPopupClick = () => removeSuccessMessagePopup();
 
-const onErrorPopupEscKeydown = (evt) => {
-  if (evt.key === 'Escape') {
+const onErrorPopupEscKeydown = () => {
+  if (isEscPressed) {
     removeErrorMessagePopup();
   }
 };

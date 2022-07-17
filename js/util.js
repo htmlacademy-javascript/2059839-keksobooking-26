@@ -34,8 +34,11 @@ const debounce = (callback, timeoutDelay = 500) => {
   };
 };
 
+const isEscPressed = (evt) => evt.key === 'Escape';
+
 export {
   cutNumber,
   showAlert,
+  isEscPressed,
   debounce
 };
