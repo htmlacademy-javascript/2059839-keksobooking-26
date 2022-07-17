@@ -26,23 +26,20 @@ const filterPriceRange = {
   }
 };
 
-const getPriceLabel = (element) => {
-  let priceLabel = 'any';
-  if ( element >= filterPriceRange.low.min && element < filterPriceRange.low.max ) {
-    priceLabel = 'low';
+const filterPrice = (price) => {
+  switch (mapFilterPriceElement.value) {
+    case 'any':
+      return true;
+    case 'low':
+      return  filterPriceRange.low.min <= price < filterPriceRange.low.max;
+    case 'middle':
+      return filterPriceRange.middle.min <= price < filterPriceRange.middle.max;
+    case 'high':
+      return filterPriceRange.high.min <= price;
   }
-  if ( element >= filterPriceRange.middle.min && element < filterPriceRange.middle.max ) {
-    priceLabel = 'middle';
-  }
-  if ( element >= filterPriceRange.high.min ) {
-    priceLabel = 'high';
-  }
-
-  return priceLabel;
 };
 
 const filterType = (type) => mapFilterTypeElement.value === 'any' || mapFilterTypeElement.value === type;
-const filterPrice = (price) => mapFilterPriceElement.value === 'any' || mapFilterPriceElement.value === getPriceLabel(price);
 const filterRoomsNumber = (roomsNumber) => mapFilterRoomNumberElement.value === 'any' || Number(mapFilterRoomNumberElement.value) === roomsNumber;
 const filterCapacity = (guests) => mapFilterCapacityElement.value === 'any' || Number(mapFilterCapacityElement.value) === guests;
 
