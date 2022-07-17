@@ -125,6 +125,7 @@ pristine.addValidator(capacityElement, validateRoomCapacity, getCapacityErrorMes
 pristine.addValidator(adPriceElement, validateMinPrice, getMinPriceErrorMessage);
 
 const validateUserForm = (element) => pristine.validate(element);
+const resetValidationErrors = (element) => pristine.reset(element);
 
 const onRoomNumberChange = () => validateUserForm(capacityElement);
 
@@ -154,6 +155,7 @@ const setAdTimeInElementListener = () => adTimeInElement.addEventListener('chang
 export {
   adFormValidationSetting,
   validateUserForm,
+  resetValidationErrors,
   setPriceRelativeAttribute,
   setAdRoomElementListener,
   setAdTypeElementListener,

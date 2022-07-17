@@ -16,6 +16,7 @@ import {
 import {
   setPriceRelativeAttribute,
   validateUserForm,
+  resetValidationErrors,
   setAdRoomElementListener,
   setAdTypeElementListener,
   setAdTimeOutElementListener,
@@ -140,8 +141,9 @@ setUserFormSubmit(
 );
 //указываем, что делать при сбросе формы
 setButtonResetListener(
-  //onFormReset
+  //onFormResetActions
   () => {
+    resetValidationErrors();
     clearMapLayer();
     setDefaultAvatar();
     removePhotos();
