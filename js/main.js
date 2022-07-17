@@ -44,7 +44,8 @@ import {
 
 import {
   getData,
-  sendData
+  sendData,
+  similarAdsLoadingErrorMessage
 } from './api.js';
 
 import {
@@ -62,7 +63,7 @@ import {
 const SIMILLAR_AD_COUNT = 10;
 const ADS_RENDER_DELAY = 500;
 const ALERT_SHOW_TIME = 10000;
-const similarAdsLoadingErrorMessage = 'Не удалось загрузить похожие объявления';
+// const similarAdsLoadingErrorMessage = 'Не удалось загрузить похожие объявления';
 
 disableUserForm();
 disableMapFilter();

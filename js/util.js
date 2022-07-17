@@ -1,16 +1,30 @@
 const cutNumber = (num, numLength) => parseFloat( num.toFixed(numLength) );
 
+const alertMessageSetting = {
+  style:{
+    zIndex: 100,
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    right: 0,
+    padding: '10px 3px',
+    fontSize: '30px',
+    textAlign: 'center',
+    backgroundColor: 'red'
+  }
+};
+
 const showAlert = (message, showTime) => {
   const alertContainerElement = document.createElement('div');
-  alertContainerElement.style.zIndex = '100';
-  alertContainerElement.style.position = 'absolute';
-  alertContainerElement.style.left = '0';
-  alertContainerElement.style.top = '0';
-  alertContainerElement.style.right = '0';
-  alertContainerElement.style.padding = '10px 3px';
-  alertContainerElement.style.fontSize = '30px';
-  alertContainerElement.style.textAlign = 'center';
-  alertContainerElement.style.backgroundColor = 'red';
+  alertContainerElement.style.zIndex = alertMessageSetting.style.zIndex;
+  alertContainerElement.style.position = alertMessageSetting.style.position;
+  alertContainerElement.style.left = alertMessageSetting.style.left;
+  alertContainerElement.style.top = alertMessageSetting.style.top;
+  alertContainerElement.style.right = alertMessageSetting.style.right;
+  alertContainerElement.style.padding = alertMessageSetting.style.padding;
+  alertContainerElement.style.fontSize = alertMessageSetting.style.fontSize;
+  alertContainerElement.style.textAlign = alertMessageSetting.style.fontSize;
+  alertContainerElement.style.backgroundColor = alertMessageSetting.style.backgroundColor;
 
   alertContainerElement.textContent = message;
 

@@ -13,6 +13,9 @@ const mapFilterChildrenElement = Array.from(mapFilterContainerElement.children);
 const buttonSubmitElement = adFormContainerElement.querySelector( '.ad-form__submit');
 const buttonResetElement = adFormContainerElement.querySelector( '.ad-form__reset');
 
+const SubmitButtonTextWhenActive = 'Опубликовать';
+const SubmitButtonTextWhenInactive = 'Опубликовать';
+
 
 const disableMapFilter = () => {
   mapFilterContainerElement.classList.add('map__filters--disabled');
@@ -55,12 +58,12 @@ const setAddressValue = (point, coordinateLength) => {
 
 const blockSubmitButton = () => {
   buttonSubmitElement.disabled = true;
-  buttonSubmitElement.textContent = 'Отправляю...';
+  buttonSubmitElement.textContent = SubmitButtonTextWhenInactive;
 };
 
 const unblockSubmitButton = () => {
   buttonSubmitElement.disabled = false;
-  buttonSubmitElement.textContent = 'Опубликовать';
+  buttonSubmitElement.textContent = SubmitButtonTextWhenActive;
 };
 
 const onUserFormSubmit = (evt, validator, dataAction, onValidFormAction, onInvalidFormAction) => {

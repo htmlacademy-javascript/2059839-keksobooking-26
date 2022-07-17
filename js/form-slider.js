@@ -2,9 +2,9 @@ import {
   adFormValidationSetting,
 } from './form-validation.js';
 
-const adFormSliderElement = document.querySelector('.ad-form').querySelector('.ad-form__slider');
-const adTypeElement = document.querySelector('.ad-form').querySelector( '[name="type"]');
-const adPriceElement = document.querySelector('.ad-form').querySelector( '[name="price"]');
+const adFormSliderElement = document.querySelector('.ad-form__slider');
+const adTypeElement = document.querySelector( '[name="type"]');
+const adPriceElement = document.querySelector( '[name="price"]');
 
 const getSliderStartPosition = () => {
   if (adPriceElement.value === undefined) {

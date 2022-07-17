@@ -4,23 +4,29 @@ const FILE_TYPES = [
   'jpeg',
   'png'
 ];
+const defaultAvatarImageSource = 'img/muffin-grey.svg';
 const avatarUploaderElement = document.querySelector('#avatar');
 const avatarPreviewElement = document.querySelector('.ad-form-header__preview img');
+const photoPreviewSetting = {
+  alt: 'Фото объекта размещения',
+  width:70,
+  height:70
+};
 
 const photoUploaderElement = document.querySelector('#images');
 const photoPreviewContainerElement = document.querySelector('.ad-form__photo');
 
 const createPhotoPreviewElement = () => {
   const photoPreviewElement = document.createElement('img');
-  photoPreviewElement.alt = 'Фото объекта размещения';
-  photoPreviewElement.width = '70';
-  photoPreviewElement.height = '70';
+  photoPreviewElement.alt = photoPreviewSetting.alt;
+  photoPreviewElement.width = photoPreviewSetting.width;
+  photoPreviewElement.height = photoPreviewSetting.height;
 
   photoPreviewContainerElement.appendChild(photoPreviewElement);
 };
 
 const setDefaultAvatar = () => {
-  avatarPreviewElement.src = 'img/muffin-grey.svg';
+  avatarPreviewElement.src = defaultAvatarImageSource;
 };
 
 const removePhotos = () => {
