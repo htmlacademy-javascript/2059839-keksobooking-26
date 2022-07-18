@@ -5,12 +5,7 @@ const mapFilterPriceElement = mapFiltersContainerElement.querySelector( '[name="
 const mapFilterRoomNumberElement = mapFiltersContainerElement.querySelector( '[name="housing-rooms"]');
 const mapFilterCapacityElement = mapFiltersContainerElement.querySelector( '[name="housing-guests"]');
 
-const mapWifiFilterElement = mapFiltersContainerElement.querySelector( '#filter-wifi');
-const mapDishwasherFilterElement = mapFiltersContainerElement.querySelector( '#filter-dishwasher');
-const mapParkingFilterElement = mapFiltersContainerElement.querySelector( '#filter-parking');
-const mapWasherFilterElement = mapFiltersContainerElement.querySelector( '#filter-washer');
-const mapElevatorFilterElement = mapFiltersContainerElement.querySelector( '#filter-elevator');
-const mapConditionerFilterElement = mapFiltersContainerElement.querySelector( '#filter-conditioner');
+const mapFeaturesFilterElement = Array.from(mapFiltersContainerElement.querySelectorAll('[name="features"]'));
 
 const filterPriceRange = {
   low:{
@@ -43,34 +38,38 @@ const filterType = (type) => mapFilterTypeElement.value === 'any' || mapFilterTy
 const filterRoomsNumber = (roomsNumber) => mapFilterRoomNumberElement.value === 'any' || Number(mapFilterRoomNumberElement.value) === roomsNumber;
 const filterCapacity = (guests) => mapFilterCapacityElement.value === 'any' || Number(mapFilterCapacityElement.value) === guests;
 
-const filterFeature = (features, featureElement) => {
-  if (featureElement.checked) {
-    if (features === undefined) {
-      return false;
-    } else if (!features.includes(featureElement.value)) {
-      return false;
+const filterFeatures = (features) => {
+  const selectedFeatures = mapFeaturesFilterElement.filter((featureElement) => featureElement.checked);
+  let isAcceptable = true;
+
+  if (features === undefined && selectedFeatures.length > 0) {
+    isAcceptable = false;
+    return isAcceptable;
+  }
+
+  for (let i = 0; i < selectedFeatures.length; i++) {
+    isAcceptable = features.includes(selectedFeatures[i].value);
+    if (!isAcceptable) {
+      return isAcceptable;
     }
   }
-  return true;
+
+  return isAcceptable;
 };
 
 const filterData = (array, resultLength) => {
   const resultArray = [];
 
   for (let i = 0; i < array.length; i++) {
-    if (
-      filterType(array[i].offer.type)
+    const isMatch = filterType(array[i].offer.type)
     && filterPrice(array[i].offer.price)
     && filterRoomsNumber(array[i].offer.rooms)
     && filterCapacity(array[i].offer.guests)
-    && filterFeature(array[i].offer.features, mapWifiFilterElement)
-    && filterFeature(array[i].offer.features, mapDishwasherFilterElement)
-    && filterFeature(array[i].offer.features, mapParkingFilterElement)
-    && filterFeature(array[i].offer.features, mapWasherFilterElement)
-    && filterFeature(array[i].offer.features, mapElevatorFilterElement)
-    && filterFeature(array[i].offer.features, mapConditionerFilterElement)
-    ) {
+    && filterFeatures(array[i].offer.features);
+
+    if (isMatch) {
       resultArray.push(array[i]);
+
       if (resultArray.length === resultLength) {
         break;
       }
@@ -79,7 +78,12 @@ const filterData = (array, resultLength) => {
   return resultArray;
 };
 
-const onMapFilterInputChange = (actions, array, resultLength) => actions(filterData(array, resultLength));
+// const onMapFilterInputChange = (actions, array, resultLength) => actions(filterData(array, resultLength));
+
+const onMapFilterInputChange = (actions, array, resultLength) => {
+  actions(filterData(array, resultLength));
+};
+
 
 const setMapFiltersListener = (actions, array, resultLength) => mapFiltersContainerElement.addEventListener('change', () => onMapFilterInputChange(actions, array, resultLength));
 
