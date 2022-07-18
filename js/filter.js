@@ -78,12 +78,7 @@ const filterData = (array, resultLength) => {
   return resultArray;
 };
 
-// const onMapFilterInputChange = (actions, array, resultLength) => actions(filterData(array, resultLength));
-
-const onMapFilterInputChange = (actions, array, resultLength) => {
-  actions(filterData(array, resultLength));
-};
-
+const onMapFilterInputChange = (actions, array, resultLength) => actions(filterData(array, resultLength));
 
 const setMapFiltersListener = (actions, array, resultLength) => mapFiltersContainerElement.addEventListener('change', () => onMapFilterInputChange(actions, array, resultLength));
 

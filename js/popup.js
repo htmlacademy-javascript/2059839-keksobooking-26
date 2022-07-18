@@ -6,6 +6,22 @@ const typeMap = {
   bungalow:'Бунгало',
   hotel:'Отель'
 };
+
+const popupPrettyText = {
+  guest:{
+    '0':'не для гостей',
+    '1':'для 1 гостя',
+    '2':'для 2-х гостей',
+    '3':'для 3-х гостей'
+  },
+  room:{
+    '1':'1 комната',
+    '2':'2 комнаты',
+    '3':'3 комнаты',
+    '100':'100 комнат'
+  }
+};
+
 const popupTemplateElement = document.querySelector('#card').content.querySelector('.popup');
 const successMessageTemplateElement = document.querySelector('#success').content.querySelector('.success');
 const errorMessageTemplateElement = document.querySelector('#error').content.querySelector('.error');
@@ -20,7 +36,7 @@ const createPopup = (element) => {
   newPopupElement.querySelector('.popup__text--address').textContent = element.offer.address;
   newPopupElement.querySelector('.popup__text--price').textContent = `${element.offer.price} `;
   newPopupElement.querySelector('.popup__text--price').insertAdjacentHTML('beforeend', '<span>₽/ночь</span>');
-  newPopupElement.querySelector('.popup__text--capacity').textContent = `${element.offer.rooms} комнаты для ${element.offer.guests} гостей`;
+  newPopupElement.querySelector('.popup__text--capacity').textContent = `${popupPrettyText.room[element.offer.rooms]} ${popupPrettyText.guest[element.offer.guests]}`;
   newPopupElement.querySelector('.popup__type').textContent = typeMap[element.offer.type];
   newPopupElement.querySelector('.popup__text--time').textContent = `Заезд после ${element.offer.checkin}, выезд до ${element.offer.checkout}`;
 
