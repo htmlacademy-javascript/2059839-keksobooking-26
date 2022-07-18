@@ -67,25 +67,13 @@ const fillMap = () => {
 };
 
 // функция на создание точек объявлений на карте и отрисовку слоя с ними
-const fillMapLayer = (array) => {
-  for (let i = 0; i < array.length; i++) {
-    createMarker(array[i]);
-  }
-};
+const fillMapLayer = (array) => array.forEach((element) => createMarker(element));
 
 const clearMapLayer = () => markerGroup.clearLayers();
 
-const saveDefaultMapLayer = () => {
-  markerGroup.eachLayer(
-    (layer) => layer.addTo(defaultMarkerGroup)
-  );
-};
+const saveDefaultMapLayer = () => markerGroup.eachLayer( (layer) => layer.addTo(defaultMarkerGroup) );
 
-const setDefaultMapLayer = () => {
-  defaultMarkerGroup.eachLayer(
-    (layer) => layer.addTo(markerGroup)
-  );
-};
+const setDefaultMapLayer = () => defaultMarkerGroup.eachLayer( (layer) => layer.addTo(markerGroup) );
 
 const setMapView = () => {
   map.setView(

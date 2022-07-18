@@ -20,25 +20,25 @@ const SubmitButtonTextWhenInactive = 'Опубликовать';
 const disableMapFilter = () => {
   mapFilterContainerElement.classList.add('map__filters--disabled');
 
-  for (let i = 0; i < mapFilterChildrenElement.length; i++) {
-    mapFilterChildrenElement[i].disabled = true;
-  }
+  mapFilterChildrenElement.forEach( (mapFilter) => {
+    mapFilter.disabled = true;
+  });
 };
 
 const enableMapFilter = () => {
   mapFilterContainerElement.classList.remove('map__filters--disabled');
 
-  for (let i = 0; i < mapFilterChildrenElement.length; i++) {
-    mapFilterChildrenElement[i].disabled = false;
-  }
+  mapFilterChildrenElement.forEach( (mapFilter) => {
+    mapFilter.disabled = false;
+  });
 };
 
 const disableUserForm = () => {
   adFormContainerElement.classList.add('ad-form--disabled');
 
-  for (let i = 0; i < adFormChildrenElement.length; i++) {
-    adFormChildrenElement[i].disabled = true;
-  }
+  adFormChildrenElement.forEach( (adFormElement) => {
+    adFormElement.disabled = true;
+  });
 
   adFormSliderElement.disabled = true;
 };
@@ -46,9 +46,9 @@ const disableUserForm = () => {
 const enableUserForm = () => {
   adFormContainerElement.classList.remove('ad-form--disabled');
 
-  for (let i = 0; i < adFormChildrenElement.length; i++) {
-    adFormChildrenElement[i].disabled = false;
-  }
+  adFormChildrenElement.forEach( (adFormElement) => {
+    adFormElement.disabled = false;
+  });
   adFormSliderElement.disabled = false;
 };
 

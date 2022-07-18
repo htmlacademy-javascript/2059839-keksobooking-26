@@ -58,10 +58,6 @@ const filterData = (array, resultLength) => {
   const resultArray = [];
 
   for (let i = 0; i < array.length; i++) {
-    if (resultArray.length === resultLength) {
-      break;
-    }
-
     if (
       filterType(array[i].offer.type)
     && filterPrice(array[i].offer.price)
@@ -75,6 +71,9 @@ const filterData = (array, resultLength) => {
     && filterFeature(array[i].offer.features, mapConditionerFilterElement)
     ) {
       resultArray.push(array[i]);
+      if (resultArray.length === resultLength) {
+        break;
+      }
     }
   }
   return resultArray;
