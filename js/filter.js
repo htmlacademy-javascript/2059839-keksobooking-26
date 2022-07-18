@@ -40,21 +40,20 @@ const filterCapacity = (guests) => mapFilterCapacityElement.value === 'any' || N
 
 const filterFeatures = (features) => {
   const selectedFeatures = mapFeaturesFilterElement.filter((featureElement) => featureElement.checked);
-  let isAcceptable = true;
 
-  if (features === undefined && selectedFeatures.length > 0) {
-    isAcceptable = false;
-    return isAcceptable;
-  }
+  if (selectedFeatures.length > 0) {
+    if (features === undefined) {
+      return false;
+    }
 
-  for (let i = 0; i < selectedFeatures.length; i++) {
-    isAcceptable = features.includes(selectedFeatures[i].value);
-    if (!isAcceptable) {
-      return isAcceptable;
+    for (let i = 0; i < selectedFeatures.length; i++) {
+      if (!features.includes(selectedFeatures[i].value)) {
+        return false;
+      }
     }
   }
 
-  return isAcceptable;
+  return true;
 };
 
 const filterData = (array, resultLength) => {
