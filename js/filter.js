@@ -54,24 +54,35 @@ const filterFeature = (features, featureElement) => {
   return true;
 };
 
-const filterData = (array) =>
-  array
-    .filter((ad) =>
-      filterType(ad.offer.type)
-      && filterPrice(ad.offer.price)
-      && filterRoomsNumber(ad.offer.rooms)
-      && filterCapacity(ad.offer.guests)
-      && filterFeature(ad.offer.features, mapWifiFilterElement)
-      && filterFeature(ad.offer.features, mapDishwasherFilterElement)
-      && filterFeature(ad.offer.features, mapParkingFilterElement)
-      && filterFeature(ad.offer.features, mapWasherFilterElement)
-      && filterFeature(ad.offer.features, mapElevatorFilterElement)
-      && filterFeature(ad.offer.features, mapConditionerFilterElement)
-    );
+const filterData = (array, resultLength) => {
+  const resultArray = [];
 
-const onMapFilterInputChange = (actions, array) => actions(filterData(array));
+  for (let i = 0; i < array.length; i++) {
+    if (resultArray.length === resultLength) {
+      break;
+    }
 
-const setMapFiltersListener = (actions, array) => mapFiltersContainerElement.addEventListener('change', () => onMapFilterInputChange(actions, array));
+    if (
+      filterType(array[i].offer.type)
+    && filterPrice(array[i].offer.price)
+    && filterRoomsNumber(array[i].offer.rooms)
+    && filterCapacity(array[i].offer.guests)
+    && filterFeature(array[i].offer.features, mapWifiFilterElement)
+    && filterFeature(array[i].offer.features, mapDishwasherFilterElement)
+    && filterFeature(array[i].offer.features, mapParkingFilterElement)
+    && filterFeature(array[i].offer.features, mapWasherFilterElement)
+    && filterFeature(array[i].offer.features, mapElevatorFilterElement)
+    && filterFeature(array[i].offer.features, mapConditionerFilterElement)
+    ) {
+      resultArray.push(array[i]);
+    }
+  }
+  return resultArray;
+};
+
+const onMapFilterInputChange = (actions, array, resultLength) => actions(filterData(array, resultLength));
+
+const setMapFiltersListener = (actions, array, resultLength) => mapFiltersContainerElement.addEventListener('change', () => onMapFilterInputChange(actions, array, resultLength));
 
 export {
   setMapFiltersListener

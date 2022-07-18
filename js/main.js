@@ -89,13 +89,13 @@ setMapLoadListener(
       // actions
       (filteredAds) => {
         clearMapLayer();
-        filteredAds.splice(SIMILLAR_AD_COUNT);
         debounce(
           fillMapLayer(filteredAds),
           ADS_RENDER_DELAY
         );
       },
-      ads
+      ads,
+      SIMILLAR_AD_COUNT
     );
   },
   // onFailedDataLoad
