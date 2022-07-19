@@ -67,28 +67,15 @@ const fillMap = () => {
 };
 
 // функция на создание точек объявлений на карте и отрисовку слоя с ними
-const fillMapLayer = (array) => {
-  array.forEach((element) => createMarker(element));
-};
+const fillMapLayer = (array) => array.forEach((element) => createMarker(element));
 
-const clearMapLayer = () => {
-  markerGroup.clearLayers();
-};
-const saveDefaultMapLayer = () => {
-  markerGroup.eachLayer(
-    (layer) => layer.addTo(defaultMarkerGroup)
-  );
-};
+const clearMapLayer = () => markerGroup.clearLayers();
 
-const setDefaultMapLayer = () => {
-  defaultMarkerGroup.eachLayer(
-    (layer) => layer.addTo(markerGroup)
-  );
-};
+const saveDefaultMapLayer = () => markerGroup.eachLayer( (layer) => layer.addTo(defaultMarkerGroup) );
 
-//функция на установку дефолтной позиции карты
-const setDefaultMapPosition = () => {
-  map.closePopup();
+const setDefaultMapLayer = () => defaultMarkerGroup.eachLayer( (layer) => layer.addTo(markerGroup) );
+
+const setMapView = () => {
   map.setView(
     {
       lat:mapStartPosition.lat,
@@ -96,6 +83,13 @@ const setDefaultMapPosition = () => {
     },
     mapStartPosition.scale
   );
+
+};
+
+//функция на установку дефолтной позиции карты
+const setDefaultMapPosition = () => {
+  map.closePopup();
+  setMapView();
 
   mainMarker.setLatLng(
     {
@@ -105,45 +99,35 @@ const setDefaultMapPosition = () => {
   );
 };
 
-const setDefaultAddressValue = () => {
-  setAddressValue(mainMarker.getLatLng(), mapStartPosition.coordinateNumLength);
+const setDefaultAddressValue = () => setAddressValue(mainMarker.getLatLng(), mapStartPosition.coordinateNumLength);
+
+const onMapLoad = (pageState, dataAction, onSuccessDataAction, onFailedDataAction) => {
+  pageState();
+  fillMap();
+  setDefaultAddressValue();
+  dataAction(
+    //отрисовываем метки при успешном получении данных и активируем фильтры
+    (ads) => {
+      onSuccessDataAction(ads);
+    },
+    () => {
+      onFailedDataAction();
+    }
+  );
 };
 
-const setMapLoadState = (pageState, dataAction, onSuccessDataAction, onFailedDataAction) => {
-  map.on('load', () => {
-    pageState();
-    fillMap();
-    setDefaultAddressValue();
-    dataAction(
-      //отрисовываем метки при успешном получении данных и активируем фильтры
-      (ads) => {
-        onSuccessDataAction(ads);
-      },
-      () => {
-        onFailedDataAction();
-      }
-    );
-  })
-    .setView(
-      {
-        lat:mapStartPosition.lat,
-        lng:mapStartPosition.lng,
-      },
-      mapStartPosition.scale
-    );
+const setMapLoadListener = (pageState, dataAction, onSuccessDataAction, onFailedDataAction) => {
+  map.on('load', () => onMapLoad(pageState, dataAction, onSuccessDataAction, onFailedDataAction));
+  setMapView();
 };
 
-const setMainMarkerMoveendListener = (onMoveEndAction) => {
-  mainMarker.on('moveend', (evt) => {
-    onMoveEndAction(evt.target.getLatLng(), mapStartPosition.coordinateNumLength);
-  });
-};
+const setMainMarkerMoveendListener = (onMoveEndAction) => mainMarker.on('moveend', (evt) => onMoveEndAction(evt.target.getLatLng(), mapStartPosition.coordinateNumLength));
 
 export {
   setDefaultMapPosition,
   setDefaultAddressValue,
   setDefaultMapLayer,
-  setMapLoadState,
+  setMapLoadListener,
   setMainMarkerMoveendListener,
   fillMapLayer,
   clearMapLayer,

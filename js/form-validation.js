@@ -56,7 +56,7 @@ const adFormValidationSetting = {
   },
   'address':{
     'required':true,
-    'readonly':true
+    'readOnly':true
   }
 };
 
@@ -90,7 +90,7 @@ const setPriceValidationSettings = () => {
 
 //функция на установку сетингов для адреса
 const setAddressValidationSettings = () => {
-  adAddressElement.readOnly = adFormValidationSetting.address.readonly;
+  adAddressElement.readOnly = adFormValidationSetting.address.readOnly;
   //атрибуты для проверок
   adAddressElement.required = adFormValidationSetting.address.required;
   //тексты ошибок
@@ -103,7 +103,7 @@ const validateRoomCapacity = () => adFormValidationSetting.capacity.roomNumberOp
 //функция на возврат текста ошибки при невалидном выборе мест
 const getCapacityErrorMessage = () => validationPrettyErrorText.capacity[roomNumberElement.value];
 
-const validateMinPrice = () => Number(adPriceElement.value) >= Number(adFormValidationSetting.price.min[adTypeElement.value]);
+const validateMinPrice = () => Number(adPriceElement.value) >= adFormValidationSetting.price.min[adTypeElement.value];
 
 const getMinPriceErrorMessage = () => `${validationPrettyErrorText.price.min}${adFormValidationSetting.price.min[adTypeElement.value]} руб.`;
 //выставляем настройки в дом перед созданием валидатора
@@ -125,10 +125,9 @@ pristine.addValidator(capacityElement, validateRoomCapacity, getCapacityErrorMes
 pristine.addValidator(adPriceElement, validateMinPrice, getMinPriceErrorMessage);
 
 const validateUserForm = (element) => pristine.validate(element);
+const resetValidationErrors = (element) => pristine.reset(element);
 
-const onRoomNumberChange = () => {
-  validateUserForm(capacityElement);
-};
+const onRoomNumberChange = () => validateUserForm(capacityElement);
 
 const onTypeChange = () => {
   adPriceElement.min = adFormValidationSetting.price.min[adTypeElement.value];
@@ -156,6 +155,7 @@ const setAdTimeInElementListener = () => adTimeInElement.addEventListener('chang
 export {
   adFormValidationSetting,
   validateUserForm,
+  resetValidationErrors,
   setPriceRelativeAttribute,
   setAdRoomElementListener,
   setAdTypeElementListener,

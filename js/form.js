@@ -13,6 +13,9 @@ const mapFilterChildrenElement = Array.from(mapFilterContainerElement.children);
 const buttonSubmitElement = adFormContainerElement.querySelector( '.ad-form__submit');
 const buttonResetElement = adFormContainerElement.querySelector( '.ad-form__reset');
 
+const SubmitButtonTextWhenActive = 'Опубликовать';
+const SubmitButtonTextWhenInactive = 'Опубликовать';
+
 
 const disableMapFilter = () => {
   mapFilterContainerElement.classList.add('map__filters--disabled');
@@ -24,6 +27,7 @@ const disableMapFilter = () => {
 
 const enableMapFilter = () => {
   mapFilterContainerElement.classList.remove('map__filters--disabled');
+
   mapFilterChildrenElement.forEach( (mapFilter) => {
     mapFilter.disabled = false;
   });
@@ -31,16 +35,19 @@ const enableMapFilter = () => {
 
 const disableUserForm = () => {
   adFormContainerElement.classList.add('ad-form--disabled');
-  adFormChildrenElement.forEach( (adFormItem) => {
-    adFormItem.disabled = true;
+
+  adFormChildrenElement.forEach( (adFormElement) => {
+    adFormElement.disabled = true;
   });
+
   adFormSliderElement.disabled = true;
 };
 
 const enableUserForm = () => {
   adFormContainerElement.classList.remove('ad-form--disabled');
-  adFormChildrenElement.forEach( (adFormItem) => {
-    adFormItem.disabled = false;
+
+  adFormChildrenElement.forEach( (adFormElement) => {
+    adFormElement.disabled = false;
   });
   adFormSliderElement.disabled = false;
 };
@@ -51,50 +58,44 @@ const setAddressValue = (point, coordinateLength) => {
 
 const blockSubmitButton = () => {
   buttonSubmitElement.disabled = true;
-  buttonSubmitElement.textContent = 'Отправляю...';
+  buttonSubmitElement.textContent = SubmitButtonTextWhenInactive;
 };
 
 const unblockSubmitButton = () => {
   buttonSubmitElement.disabled = false;
-  buttonSubmitElement.textContent = 'Опубликовать';
+  buttonSubmitElement.textContent = SubmitButtonTextWhenActive;
 };
 
-const setUserFormSubmit = (validator,dataAction, onValidFormAction,onInvalidFormAction) => {
-  adFormContainerElement.addEventListener(
-    'submit',
-    (evt) => {
-      evt.preventDefault();
-      if (validator) {
-        blockSubmitButton();
-        dataAction(
-          () => {
-            adFormContainerElement.reset();
-            mapFiltersContainerElement.reset();
-            onValidFormAction();
-            unblockSubmitButton();
-          },
-          () => {
-            onInvalidFormAction();
-            unblockSubmitButton();
-          },
-          new FormData(evt.target)
-        );
-      }
-    }
-  );
+const onUserFormSubmit = (evt, validator, dataAction, onValidFormAction, onInvalidFormAction) => {
+  evt.preventDefault();
+  if (validator()) {
+    blockSubmitButton();
+    dataAction(
+      () => {
+        adFormContainerElement.reset();
+        mapFiltersContainerElement.reset();
+        onValidFormAction();
+        unblockSubmitButton();
+      },
+      () => {
+        onInvalidFormAction();
+        unblockSubmitButton();
+      },
+      new FormData(evt.target)
+    );
+  }
 };
 
-const setButtonResetListener = (onFormReset) => {
-  buttonResetElement.addEventListener(
-    'click',
-    (evt) => {
-      evt.preventDefault();
-      adFormContainerElement.reset();
-      mapFiltersContainerElement.reset();
-      onFormReset();
-    }
-  );
+const onUserFormReset = (evt, onFormResetActions) => {
+  evt.preventDefault();
+  adFormContainerElement.reset();
+  mapFiltersContainerElement.reset();
+  onFormResetActions();
 };
+
+const setUserFormSubmit = (validator, dataAction, onValidFormAction, onInvalidFormAction) => adFormContainerElement.addEventListener('submit', (evt) => onUserFormSubmit(evt, validator, dataAction, onValidFormAction, onInvalidFormAction));
+
+const setButtonResetListener = (onFormResetActions) => buttonResetElement.addEventListener('click', (evt) => onUserFormReset(evt, onFormResetActions));
 
 export {
   enableUserForm,

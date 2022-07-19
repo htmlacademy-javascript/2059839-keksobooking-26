@@ -16,6 +16,7 @@ import {
 import {
   setPriceRelativeAttribute,
   validateUserForm,
+  resetValidationErrors,
   setAdRoomElementListener,
   setAdTypeElementListener,
   setAdTimeOutElementListener,
@@ -26,7 +27,7 @@ import {
 import {
   setDefaultMapPosition,
   setDefaultAddressValue,
-  setMapLoadState,
+  setMapLoadListener,
   setMainMarkerMoveendListener,
   fillMapLayer,
   clearMapLayer,
@@ -36,14 +37,15 @@ import {
 
 import {
   setSlider,
-  updateSliderSetting,
+  updateSliderPosition,
   setSliderPosition,
   setSliderChangeListener
 } from './form-slider.js';
 
 import {
   getData,
-  sendData
+  sendData,
+  similarAdsLoadingErrorMessage
 } from './api.js';
 
 import {
@@ -60,14 +62,16 @@ import {
 
 const SIMILLAR_AD_COUNT = 10;
 const ADS_RENDER_DELAY = 500;
+const ALERT_SHOW_TIME = 10000;
+// const similarAdsLoadingErrorMessage = 'Не удалось загрузить похожие объявления';
 
 disableUserForm();
 disableMapFilter();
 
 // КАРТА
 //
-// указываем состояние страницы после успешной загрузки карты и похожих объявлений
-setMapLoadState(
+// устанавливаем обработчик на загрузку карты и указываем состояние страницы после ее успешной загрузки и загрузки похожих объявлений
+setMapLoadListener(
   // pageState
   () => {
     enableUserForm();
@@ -76,13 +80,13 @@ setMapLoadState(
   },
   // dataAction
   getData,
-  // onSuccessDataAction
+  // onSuccessDataLoad
   (ads) => {
     fillMapLayer(ads.slice(0,SIMILLAR_AD_COUNT));
     saveDefaultMapLayer();
     enableMapFilter();
     setMapFiltersListener(
-      // renderAction
+      // actions
       (filteredAds) => {
         clearMapLayer();
         debounce(
@@ -90,13 +94,13 @@ setMapLoadState(
           ADS_RENDER_DELAY
         );
       },
-      ads, // array
-      SIMILLAR_AD_COUNT // outputLength
+      ads,
+      SIMILLAR_AD_COUNT
     );
   },
-  // onFailedDataAction
+  // onFailedDataLoad
   () => {
-    showAlert('Не удалось загрузить похожие объявления');
+    showAlert(similarAdsLoadingErrorMessage, ALERT_SHOW_TIME);
   }
 );
 
@@ -112,11 +116,7 @@ setAvatarUploadListener();
 setPhotoUploadListener();
 setAdRoomElementListener();
 setAdTypeElementListener();
-setAdPriceElementListener(
-  () => {
-    setSliderPosition();
-  }
-);
+setAdPriceElementListener(setSliderPosition);
 setAdTimeOutElementListener();
 setAdTimeInElementListener();
 
@@ -135,18 +135,18 @@ setUserFormSubmit(
     setDefaultMapPosition();
     setDefaultAddressValue();
     setDefaultMapLayer();
-    updateSliderSetting();
+    updateSliderPosition();
     showSuccessMessagePopup();
   },
   //onInvalidFormAction
-  () => {
-    showErrorMessagePopup();
-  }
+  showErrorMessagePopup
 );
+
 //указываем, что делать при сбросе формы
 setButtonResetListener(
-  //onFormReset
+  //onFormResetActions
   () => {
+    resetValidationErrors();
     clearMapLayer();
     setDefaultAvatar();
     removePhotos();
@@ -154,6 +154,6 @@ setButtonResetListener(
     setDefaultMapPosition();
     setDefaultAddressValue();
     setDefaultMapLayer();
-    updateSliderSetting();
+    updateSliderPosition();
   }
 );

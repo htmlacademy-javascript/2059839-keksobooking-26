@@ -1,11 +1,12 @@
 const serverAddressForGettingData = 'https://26.javascript.pages.academy/keksobooking/data';
 const serverAddressForSendingData = 'https://26.javascript.pages.academy/keksobooking';
+const similarAdsLoadingErrorMessage = 'Не удалось загрузить похожие объявления';
 
 const getData = (onSuccess, onFail) => {
   fetch(serverAddressForGettingData)
     .then( (response) => {
       if (!response.ok) {
-        throw new Error('Не удалось загрузить похожие объявления');
+        throw new Error(similarAdsLoadingErrorMessage);
       }
       return response.json();
     })
@@ -33,5 +34,6 @@ const sendData = (onSuccess, onFail, body) => {
 
 export {
   getData,
-  sendData
+  sendData,
+  similarAdsLoadingErrorMessage
 };
