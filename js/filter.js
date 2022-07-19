@@ -38,9 +38,8 @@ const filterType = (type) => mapFilterTypeElement.value === 'any' || mapFilterTy
 const filterRoomsNumber = (roomsNumber) => mapFilterRoomNumberElement.value === 'any' || Number(mapFilterRoomNumberElement.value) === roomsNumber;
 const filterCapacity = (guests) => mapFilterCapacityElement.value === 'any' || Number(mapFilterCapacityElement.value) === guests;
 
-const filterFeatures = (features) => {
-  const selectedFeatures = mapFeaturesFilterElement.filter((featureElement) => featureElement.checked);
 
+const filterFeatures = (features, selectedFeatures) => {
   if (selectedFeatures.length > 0) {
     if (features === undefined) {
       return false;
@@ -56,18 +55,19 @@ const filterFeatures = (features) => {
   return true;
 };
 
-const filterData = (array, resultLength) => {
+const filterData = (ads, resultLength) => {
   const resultArray = [];
+  const selectedFeatures = mapFeaturesFilterElement.filter((featureElement) => featureElement.checked);
 
-  for (let i = 0; i < array.length; i++) {
-    const isMatch = filterType(array[i].offer.type)
-    && filterPrice(array[i].offer.price)
-    && filterRoomsNumber(array[i].offer.rooms)
-    && filterCapacity(array[i].offer.guests)
-    && filterFeatures(array[i].offer.features);
+  for (let i = 0; i < ads.length; i++) {
+    const isMatch = filterType(ads[i].offer.type)
+    && filterPrice(ads[i].offer.price)
+    && filterRoomsNumber(ads[i].offer.rooms)
+    && filterCapacity(ads[i].offer.guests)
+    && filterFeatures(ads[i].offer.features, selectedFeatures);
 
     if (isMatch) {
-      resultArray.push(array[i]);
+      resultArray.push(ads[i]);
 
       if (resultArray.length === resultLength) {
         break;

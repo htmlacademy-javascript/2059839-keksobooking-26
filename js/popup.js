@@ -75,16 +75,16 @@ const createPopup = (element) => {
   return newPopupElement;
 };
 
-const onSuccessPopupEscKeydown = () => {
-  if (isEscPressed) {
+const onSuccessPopupEscKeydown = (evt) => {
+  if (isEscPressed(evt)) {
     removeSuccessMessagePopup();
   }
 };
 
 const onSuccessPopupClick = () => removeSuccessMessagePopup();
 
-const onErrorPopupEscKeydown = () => {
-  if (isEscPressed) {
+const onErrorPopupEscKeydown = (evt) => {
+  if (isEscPressed(evt)) {
     removeErrorMessagePopup();
   }
 };
@@ -95,13 +95,13 @@ const showSuccessMessagePopup = () => {
   const successMessageElement = successMessageTemplateElement.cloneNode(true);
   document.body.appendChild(successMessageElement);
   document.addEventListener('click', onSuccessPopupClick);
-  document.addEventListener('keydown', onSuccessPopupEscKeydown);
+  document.addEventListener('keydown', (evt) => onSuccessPopupEscKeydown(evt));
 };
 
 function removeSuccessMessagePopup () {
   document.body.querySelector('.success').remove();
   document.removeEventListener('click', onSuccessPopupClick);
-  document.removeEventListener('keydown', onSuccessPopupEscKeydown);
+  document.removeEventListener('keydown', (evt) => onSuccessPopupEscKeydown(evt));
 }
 
 const showErrorMessagePopup = () => {
