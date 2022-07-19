@@ -60,7 +60,7 @@ import {
   removePhotos
 } from './file.js';
 
-const SIMILLAR_AD_COUNT = 10;
+const SIMILAR_AD_COUNT = 10;
 const ADS_RENDER_DELAY = 500;
 const ALERT_SHOW_TIME = 10000;
 // const similarAdsLoadingErrorMessage = 'Не удалось загрузить похожие объявления';
@@ -82,7 +82,7 @@ setMapLoadListener(
   getData,
   // onSuccessDataLoad
   (ads) => {
-    fillMapLayer(ads.slice(0,SIMILLAR_AD_COUNT));
+    fillMapLayer(ads.slice(0,SIMILAR_AD_COUNT));
     saveDefaultMapLayer();
     enableMapFilter();
     setMapFiltersListener(
@@ -95,7 +95,7 @@ setMapLoadListener(
         );
       },
       ads,
-      SIMILLAR_AD_COUNT
+      SIMILAR_AD_COUNT
     );
   },
   // onFailedDataLoad
