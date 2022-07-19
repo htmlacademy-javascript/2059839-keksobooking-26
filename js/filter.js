@@ -38,20 +38,14 @@ const filterType = (type) => mapFilterTypeElement.value === 'any' || mapFilterTy
 const filterRoomsNumber = (roomsNumber) => mapFilterRoomNumberElement.value === 'any' || Number(mapFilterRoomNumberElement.value) === roomsNumber;
 const filterCapacity = (guests) => mapFilterCapacityElement.value === 'any' || Number(mapFilterCapacityElement.value) === guests;
 
-
 const filterFeatures = (features, selectedFeatures) => {
   if (selectedFeatures.length > 0) {
     if (features === undefined) {
       return false;
     }
 
-    for (let i = 0; i < selectedFeatures.length; i++) {
-      if (!features.includes(selectedFeatures[i].value)) {
-        return false;
-      }
-    }
+    return selectedFeatures.every((featureElement) => features.includes(featureElement.value));
   }
-
   return true;
 };
 
